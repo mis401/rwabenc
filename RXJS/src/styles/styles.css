@@ -5,8 +5,44 @@
 
 .instruction-wrapper{
     display: flex;
+    justify-content: space-between;
 }
 
+.instruction-op{
+    border-image: linear-gradient(#f6b73c, #4d9f0c) 30;
+    border-width: 2px;
+    border-style: solid;
+}
 .instruction-table{
-    border: 1px solid black;
+    color: #4d9f0c;
+}
+
+#instructionTable{
+    margin-top: 2%;
+    border-image: linear-gradient(#f6b73c, #4d9f0c) 30;
+    border-width: 2px;
+    border-style: solid;
+}
+button{
+    background: linear-gradient(#f6b73c, #4d9f0c);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background: linear-gradient(#4d9f0c, #f6b73c);
+}
+select{
+    background: linear-gradient(#f6b73c, #4d9f0c);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color:wheat;
+}
+h1{
+    text-align: center;
+    color: #4d9f0c;
 }

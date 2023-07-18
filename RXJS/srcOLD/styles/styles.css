@@ -1,0 +1,12 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.instruction-wrapper{
+    display: flex;
+}
+
+.instruction-table{
+    border: 1px solid black;
+}

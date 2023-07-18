@@ -68,7 +68,6 @@ export class InstructionQueue {
         instructionOp1.id = 'instructionOp1';
         instructionOp1.placeholder = 'Enter Operand 1';
         instructionWrapper.appendChild(instructionOp1);
-        instructionOp1.classList.add('instruction-op');
         
         const instructionOp = document.createElement('select');
         instructionOp.id = 'instructionOp';
@@ -77,7 +76,6 @@ export class InstructionQueue {
         instructionOp.options.add( new Option('Subtract', Operation.Subtract));
         instructionOp.options.add( new Option('Divide', Operation.Divide));
         instructionWrapper.appendChild(instructionOp);
-        instructionOp.classList.add('instruction-op');
         
         
         const instructionOp2 = document.createElement('input');
@@ -85,14 +83,12 @@ export class InstructionQueue {
         instructionOp2.id = 'instructionOp2';
         instructionOp2.placeholder = 'Enter Operand 2';
         instructionWrapper.appendChild(instructionOp2);
-        instructionOp2.classList.add('instruction-op');
         
         const instructionDest = document.createElement('input');
         instructionDest.type = 'text';
         instructionDest.id = 'instructionDest';
         instructionDest.placeholder = 'Enter Destination';
         instructionWrapper.appendChild(instructionDest);
-        instructionDest.classList.add('instruction-op');
     
     
         const instructionButton = document.createElement('button');
