@@ -1,7 +1,7 @@
 import { Observable, Subscription, filter, find, from, map, tap } from "rxjs";
 import { Instruction, Operation } from "./Operations";
 import { registryField } from "./Registry";
-import { clockGenerator$, controlSignal$, functionalUnits$, instructionBus$ } from ".";
+import { clockGenerator$, controlSignal$, fuArray, functionalUnits$, instructionBus$ } from ".";
 import { FunctionalUnit } from "./FunctionalUnit";
 
 export class InstructionQueue {
@@ -15,8 +15,13 @@ export class InstructionQueue {
         console.log(`Work started`);
         if(this.instructions.length > 0){
             let freeFU: FunctionalUnit = null;
-            functionalUnits$.pipe(find(fu => fu.operation === this.instructions[0].operation && fu.busy === false))
-            .subscribe(fu => {freeFU = fu});
+            for (let f of fuArray){
+                if(f.busy === false && f.operation === this.instructions[0].operation){
+                    freeFU = f;
+                    freeFU.busy = true; 
+                    break;
+                }
+            }
             console.log(`search result fu: ${freeFU}`);
             if (freeFU != null){
                 console.log(`Brt wtf ${this.instructions[0]}`)

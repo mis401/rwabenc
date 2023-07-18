@@ -1,4 +1,4 @@
-import { Observable, Subject, Subscriber, Subscription, combineLatest, distinct, filter, sample, take, takeLast, tap, zip } from "rxjs";
+import { Observable, Subject, Subscriber, Subscription, combineLatest, distinct, filter, of, sample, take, takeLast, tap, zip } from "rxjs";
 import { Instruction, Operation, OperationLatency, doOperation } from "./Operations";
 import { Registry, registryField } from "./Registry";
 import { Result } from "./Result";
@@ -10,6 +10,7 @@ export class FunctionalUnit {
     public operation: Operation;
     public latency: number;
     private instruction: Instruction;
+    private instructions: Instruction[];
     public busy : boolean;
     private cycle: number;
     public startCycle: number;
@@ -18,10 +19,16 @@ export class FunctionalUnit {
     private result: number;
     private instructionBus$;
     private clockSub: Subscription;
+    private deBlock: boolean;
+    private exBlock: boolean;
+    private wbBlock: boolean;
+
     public constructor(name: string, op: Operation){ 
         this.operation = op;
+        this.instructions = [];
         this.name = name;
         this.busy = false;
+        this.deBlock = this.exBlock = this.wbBlock = false;
         this.latency = OperationLatency(this.operation);
         this.status = Status.NotIssued;
         this.clockSub = clockGenerator$.subscribe(cycle => this.workCycle(this.instruction, cycle));
@@ -30,6 +37,7 @@ export class FunctionalUnit {
             distinct(),
             sample(clockGenerator$),
         ).subscribe((instruction) => {this.instruction = instruction});
+
         
     }
      
@@ -37,7 +45,8 @@ export class FunctionalUnit {
     private workCycle(instruction: Instruction, cycle: number) {
         if(instruction == null || instruction == undefined)
             return;
-        if (!this.busy) {
+        if (!this.deBlock)  {
+            this.deBlock = true;
             console.log(`Usao u cycle ${this.name}`)
             this.issue(instruction, cycle);
             console.log(`Izasao iz cycle ${this.name}`);
@@ -119,6 +128,7 @@ export class FunctionalUnit {
                 this.instruction = null;
                 this.busy = false;
                 this.status = Status.NotIssued;
+                this.deBlock = false;
             }
             
             
@@ -128,6 +138,7 @@ export class FunctionalUnit {
     
     private issue(instruction: Instruction, cycle: number){
         this.instruction = instruction;
+
         this.busy = true;
         this.startCycle = cycle;
         this.status = Status.Issued;
@@ -139,6 +150,7 @@ export class FunctionalUnit {
             instruction: instruction,
         });
         console.log(`Instruction ${instruction.toString()} issued to ${this.name}`);
+        this.deBlock = true;
     }
 }
 

@@ -1,4 +1,4 @@
-import { Observable, Subject, filter, from, interval, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap } from "rxjs";
+import { Observable, Subject, combineLatest, filter, from, interval, map, of, skipUntil, switchMap, take, takeLast, takeUntil, takeWhile, tap, zip } from "rxjs";
 import { Instruction, Operation } from "./Operations";
 import { Registry } from "./Registry";
 import { FunctionalUnit, functionalUnitsState$ } from "./FunctionalUnit";
@@ -9,7 +9,12 @@ import { InstructionTable } from "./InstructionTable";
 import { Status } from "./Status";
 
 export const controlSignal$ = new Subject<boolean>();
-export const clockGenerator$ = interval(1000).pipe(skipUntil(controlSignal$));
+export const tactGenerator$ = interval(1000);
+export const clockGenerator$ = combineLatest([controlSignal$, tactGenerator$]).pipe(
+    filter(([controlSignal, tact]) => controlSignal),
+    map(([controlSignal, tact]) => tact),
+    );
+
 
 
 export const body = document.body;
@@ -17,13 +22,13 @@ export const instructionQueue = new InstructionQueue();
 export const cdb$: Subject<Result> = new Subject<Result>();
 export const instructionBus$: Subject<Instruction> = new Subject<Instruction>();
 export const instructionQueue$ = from(instructionQueue.getAllInstructions());
-export const registryStatus = new RegistryStatus();
+
 export const instructionTable = new InstructionTable();
 instructionTable.draw();
-controlSignal$.pipe(
-    tap(() => console.log("Master on")),
-    take(1),
-    switchMap(() => instructionQueue$),
+
+zip(controlSignal$, instructionQueue$).pipe(
+    filter(([controlSignal, instruction]) => controlSignal == true),
+    map(([controlSignal, instruction]) => instruction),
 ).subscribe(instruction => {
     console.log(`Instruction ${instruction.toString()} is now drawing in table`);
     const table = instructionTable.table;
@@ -35,7 +40,7 @@ controlSignal$.pipe(
 })
 
 
-const fuArray = new Array<FunctionalUnit>();
+export const fuArray = new Array<FunctionalUnit>();
 
 for (let i = 0; i < 3; i++) {
     fuArray.push(new FunctionalUnit(`Add${i}`, Operation.Add, ));
@@ -43,28 +48,35 @@ for (let i = 0; i < 3; i++) {
 for (let i = 0; i < 2; i++) {
     fuArray.push(new FunctionalUnit(`Mul${i}`, Operation.Multiply));
 }
-export const functionalUnits$ = from(fuArray);
+export const functionalUnits$ = of(fuArray);
 
 functionalUnitsState$.pipe(
     tap(fu => console.log(fu))
 ).subscribe(state => {
     const table = instructionTable.table;
     let tr = table.rows[state.instruction.index+1];
+    if (!tr){
+        tr = table.insertRow(state.instruction.index+1);
+        table.rows[state.instruction.index+1].insertCell(0).innerHTML = state.instruction.toString();
+    }
     switch (state.status) {
         case Status.Issued:
-            tr.cells[1].innerHTML = `${state.cycle}`;
+            table.rows[state.instruction.index+1].insertCell(1).innerHTML = `${state.cycle}`;
             break;
         case Status.ExecStart:
-            tr.cells[2].innerHTML = `${state.cycle}`;
+            table.rows[state.instruction.index+1].insertCell(2).innerHTML = `${state.cycle}`;
             break;
         case Status.ExecComplet:
-            tr.cells[2].innerHTML = `${tr.cells[2].innerHTML} - ${state.cycle}`;
+            table.rows[state.instruction.index+1].cells[2].innerHTML = `${tr.cells[2].innerHTML} - ${state.cycle}`;
             break;
         case Status.Write:
-            tr.cells[3].innerHTML = `${state.cycle}`;
+            table.rows[state.instruction.index+1].insertCell(3).innerHTML = `${state.cycle}`;
             break;
+
     }
 });
+
+export const registryStatus = new RegistryStatus();
 
 instructionBus$.pipe(
     tap(i => console.log(`tap iz index ${i.toString()}`)),
