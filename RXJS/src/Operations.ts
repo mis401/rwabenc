@@ -3,11 +3,13 @@ import { FunctionalUnit } from "./FunctionalUnit";
 import { Registry, registryField } from "./Registry";
 
 export enum Operation {
-    Add = 'add',
-    Subtract = 'sub',
-    Multiply = 'mul',
-    Divide = 'div',
+    Add = 'ADD',
+    Subtract = 'SUB',
+    Multiply = 'MUL',
+    Divide = 'DIV',
 }
+
+
 
 export const doOperation = (operation: Operation,  dest: string, op1: string | number, op2?: string | number) : number => {
     if (typeof op1 === 'string') op1 = registryField.get(op1).value;
@@ -63,7 +65,7 @@ export class Instruction {
             this.op2Immediate = false;
         this.dest = dest;
 
-        console.log(this.toString());
+        //console.log(this.toString());
     }
 
     public toString() {

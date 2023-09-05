@@ -7,6 +7,7 @@ import { InstructionQueue } from "./InstructionQueue";
 import { RegistryStatus } from "./RegistryStatus";
 import { InstructionTable } from "./InstructionTable";
 import { Status } from "./Status";
+import { parseInput } from "./Parser";
 
 export const controlSignal$ = new Subject<boolean>();
 export const tactGenerator$ = interval(1000);
@@ -22,6 +23,16 @@ export const instructionQueue = new InstructionQueue();
 export const cdb$: Subject<Result> = new Subject<Result>();
 export const instructionBus$: Subject<Instruction> = new Subject<Instruction>();
 export const instructionQueue$ = from(instructionQueue.getAllInstructions());
+
+// let instructionsTest : Instruction[] = parseInput(
+//     `add r1 r2 r3
+//     add r4 r5 r6
+//     add r7 13 r7`
+//     );
+// if (instructionsTest.length == 0){
+//     console.log("Greska u parsiranju");
+// }
+// instructionsTest.forEach(instruction => console.log(instruction.toString()));
 
 export const instructionTable = new InstructionTable();
 instructionTable.draw();

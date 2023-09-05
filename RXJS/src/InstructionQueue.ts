@@ -57,6 +57,26 @@ export class InstructionQueue {
 
     public draw() {
         const host = document.body;
+
+        const instructionWrapper = document.createElement('div');
+        instructionWrapper.id = 'instructionWrapper';
+        instructionWrapper.classList.add('instruction-wrapper');
+        host.appendChild(instructionWrapper);
+
+        const textField = document.createElement('input');
+        textField.type = 'text';
+        textField.id = 'instructionField';
+        textField.placeholder = 'Enter Instructions';
+        instructionWrapper.appendChild(textField);
+
+        const startButton = document.createElement('button');
+        startButton.id = 'startButton';
+        startButton.innerText = 'Start';
+        startButton.onclick = () => controlSignal$.next(true);
+        instructionWrapper.appendChild(startButton);
+    }
+    public oldDraw() {
+        const host = document.body;
     
         const instructionWrapper = document.createElement('div');
         instructionWrapper.id = 'instructionWrapper';
