@@ -1,0 +1,124 @@
+<div class="max-w-full w-full flex items-center justify-center h-auto bg-cyan-300/50 p-20">
+    <div class="flex flex-col justify-evenly bg-sky-400 mx-auto p-20 rounded-lg max-w-7xl">
+        <p class="text-lg text-slate-100 drop-shadow-md text-center">Registracija</p>
+        <form #registerForm class="pl-10">
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Korisnicko ime</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Korisnicko ime"
+                    [(ngModel)]="newUser.username"
+                    name="username"
+                    id="username"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Lozinka</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Lozinka"
+                    [(ngModel)]="newUser.password"
+                    name="password"
+                    id="password"
+                    required
+                    type="password"
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Ime</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Ime"
+                    [(ngModel)]="newUser.firstName"
+                    name="firstName"
+                    id="firstName"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Prezime</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Prezime"
+                    [(ngModel)]="newUser.lastName"
+                    name="lastName"
+                    id="lastName"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Email"
+                    [(ngModel)]="newUser.email"
+                    name="email"
+                    id="email"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Broj telefona</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Broj telefona"
+                    [(ngModel)]="newUser.phoneNumber"
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Broj zdravstvene knjizice</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="Adresa"
+                    [(ngModel)]="newUser.zk"
+                    name="zk"
+                    id="zk"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>LBO</mat-label>
+                    <input
+                    matInput
+                    class="form-control"
+                    placeholder="LBO"
+                    [(ngModel)]="newUser.lbo"
+                    name="lbo"
+                    id="lbo"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="space-x-5 flex justify-evenly" >
+                <button mat-raised-button color="primary" (click)="onSubmit()">Registrujte se</button>
+                <button mat-flat-button color="warn" class="cancel-button" routerLink="/">Odustanite</button>
+            </div>
+        </form>
+    </div>
+</div>

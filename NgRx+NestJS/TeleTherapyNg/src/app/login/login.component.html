@@ -1,0 +1,39 @@
+<div class="max-w-full flex items-center justify-center h-screen bg-cyan-300/50">
+    <div class="flex flex-col justify-evenly bg-sky-400 mx-auto p-20 rounded-lg max-w-7xl p-50">
+        <form #loginForm ngNativeValidate>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Korisnicko ime</mat-label>
+                    <input 
+                    matInput 
+                    class="form-control"
+                    placeholder="Korisnicko ime"
+                    [(ngModel)]="user.username"
+                    name="username"
+                    id="username"
+                    required
+                    >
+                </mat-form-field>
+            </div>
+            <div class="mx-auto">
+                <mat-form-field appearance="fill">
+                    <mat-label>Lozinka</mat-label>
+                    <input 
+                    matInput 
+                    class="form-control"
+                    placeholder="Lozinka"
+                    [(ngModel)]="user.password"
+                    name="password"
+                    id="password"
+                    required
+                    type="password"
+                    >
+                </mat-form-field>
+            </div>
+            <div class="space-x-5 flex justify-evenly" >
+                <button mat-raised-button color="primary" (click)="onSubmit()">Prijavite se</button>
+                <button mat-flat-button color="warn" class="cancel-button" routerLink="/">Odustanite</button>
+            </div>
+        </form>
+    </div>
+</div>
