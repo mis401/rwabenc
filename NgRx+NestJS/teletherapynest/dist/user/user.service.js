@@ -18,18 +18,30 @@ const typeorm_1 = require("../typeorm");
 const typeorm_2 = require("typeorm");
 const typeorm_3 = require("@nestjs/typeorm");
 const argon = require("argon2");
+const roles_1 = require("../auth/roles");
 let UserService = class UserService {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
     async createUser(userToBeCreated) {
         try {
-            const hash = await argon.hash(userToBeCreated.passwordHash);
-            userToBeCreated.passwordHash = hash;
-            console.log(userToBeCreated);
-            await this.userRepo.save(userToBeCreated);
-            delete userToBeCreated.passwordHash;
-            return userToBeCreated;
+            const hash = await argon.hash(userToBeCreated.password);
+            const user = {
+                id: 0,
+                username: userToBeCreated.username,
+                passwordHash: hash,
+                email: userToBeCreated.email,
+                ime: userToBeCreated.firstName,
+                prezime: userToBeCreated.lastName,
+                phoneNumber: userToBeCreated.phoneNumber,
+                zdravstvenaKnjizica: userToBeCreated.zk,
+                lbo: userToBeCreated.lbo,
+                role: roles_1.Role.Patient
+            };
+            console.log(user);
+            await this.userRepo.save(user);
+            delete user.passwordHash;
+            return user;
         }
         catch (err) {
             console.log(err);

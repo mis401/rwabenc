@@ -36,7 +36,7 @@ let AuthService = class AuthService {
     async register(newUser) {
         try {
             const rfzo = await this.httpService
-                .post("https://www.rfzo.rs/proveraUplateDoprinosa2.php", { zk: +newUser.zdravstvenaKnjizica, lbo: +newUser.lbo }, { headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                .post("https://www.rfzo.rs/proveraUplateDoprinosa2.php", { zk: +newUser.zk, lbo: +newUser.lbo }, { headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
                 responseType: "text" })
                 .pipe((0, rxjs_1.catchError)(err => {
                 console.log(err);

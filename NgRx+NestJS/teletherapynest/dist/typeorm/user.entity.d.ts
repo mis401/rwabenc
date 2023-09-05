@@ -4,6 +4,9 @@ export declare class User {
     username: string;
     passwordHash: string;
     email: string;
+    ime: string;
+    prezime: string;
+    phoneNumber: string;
     zdravstvenaKnjizica: string;
     lbo: string;
     role: Role;

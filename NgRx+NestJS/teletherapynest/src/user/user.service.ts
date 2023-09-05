@@ -4,6 +4,7 @@ import { Repository, TypeORMError } from 'typeorm';
 import { CreateUserDTO } from './user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as argon from "argon2";
+import { Role } from 'src/auth/roles';
 
 @Injectable()
 export class UserService {
@@ -11,12 +12,23 @@ export class UserService {
 
     async createUser(userToBeCreated : CreateUserDTO){
         try{
-        const hash = await argon.hash(userToBeCreated.passwordHash);
-        userToBeCreated.passwordHash = hash;
-        console.log(userToBeCreated);
-        await this.userRepo.save(userToBeCreated);
-        delete userToBeCreated.passwordHash;
-        return userToBeCreated;
+        const hash = await argon.hash(userToBeCreated.password);
+        const user : User = {
+            id: 0,
+            username: userToBeCreated.username,
+            passwordHash: hash,
+            email: userToBeCreated.email,
+            ime: userToBeCreated.firstName,
+            prezime: userToBeCreated.lastName,
+            phoneNumber: userToBeCreated.phoneNumber,
+            zdravstvenaKnjizica: userToBeCreated.zk,
+            lbo: userToBeCreated.lbo,
+            role: Role.Patient
+        }
+        console.log(user);
+        await this.userRepo.save(user);
+        delete user.passwordHash;
+        return user;
         }
         catch(err){
             console.log(err);

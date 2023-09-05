@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { NewUser, User } from '../models';
+import { NewUser, User } from '../../models';
+import { Store } from '@ngrx/store';
+import { registerUser } from '../../store/user/user.actions';
+import { UserState } from '../../store/user/user.state';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +10,8 @@ import { NewUser, User } from '../models';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  constructor(private store: Store<UserState>) {}
+
   newUser : NewUser = {
     username: "",
     password: "",
@@ -20,5 +25,6 @@ export class RegisterComponent {
 
   onSubmit(){
     console.log(this.newUser);
+    this.store.dispatch(registerUser({user: {...this.newUser}}));
   }
 }

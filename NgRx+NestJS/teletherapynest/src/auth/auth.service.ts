@@ -10,6 +10,8 @@ import { LoginDTO } from './login.dto';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
 
+type UserNoPassword = Omit<User, "passwordHash">;
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -24,7 +26,7 @@ export class AuthService {
         try{
             const rfzo = await this.httpService
             .post("https://www.rfzo.rs/proveraUplateDoprinosa2.php", 
-                {zk: +newUser.zdravstvenaKnjizica, lbo: +newUser.lbo},
+                {zk: +newUser.zk, lbo: +newUser.lbo},
                 {headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" }, 
                 responseType: "text"})
             .pipe(
@@ -62,7 +64,7 @@ export class AuthService {
         return null;
     }
 
-    async login(user: Partial<User>){
+    async login(user: UserNoPassword){
         const payload = {user: user, sub: user.id};
         return {
             access_token: this.jwtService.sign(payload),

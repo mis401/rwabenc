@@ -11,11 +11,15 @@ import { LandingPageModule } from './landing-page/landing-page.module';
 import { LoginModule } from './login/login.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { userReducer } from './store/user.reducer';
+import { userReducer } from './store/user/user.reducer';
 import { LandingPageComponent } from './landing-page/component/landing-page.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login/component/login.component';
 import { RegisterModule } from './register/register.module';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './register/component/register.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { httpInterceptorProviders } from './interceptors';
+import { HomeComponent } from './home/component/home.component';
+import { authGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -35,10 +39,14 @@ import { RegisterComponent } from './register/register.component';
     RouterModule.forRoot([
       {path: '', component: LandingPageComponent},
       {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent}
+      {path: 'register', component: RegisterComponent},
+      {path: 'home', component: HomeComponent, canActivate: [authGuard]},
     ])
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'sr-sp'},
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

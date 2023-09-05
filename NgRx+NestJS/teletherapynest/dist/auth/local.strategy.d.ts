@@ -8,6 +8,9 @@ export declare class LocalStrategy extends LocalStrategy_base {
         id: number;
         username: string;
         email: string;
+        ime: string;
+        prezime: string;
+        phoneNumber: string;
         zdravstvenaKnjizica: string;
         lbo: string;
         role: import("./roles").Role;

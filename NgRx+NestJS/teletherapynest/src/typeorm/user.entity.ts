@@ -1,5 +1,5 @@
 import { Role } from "src/auth/roles";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
 export class User {
@@ -9,20 +9,28 @@ export class User {
 })
 id: number;
 
-@Column()
+@Column({unique: true})
 username: string;
 
 @Column()
 passwordHash: string;
 
-@Column()
+@Column({unique: true})
 email: string;
 
+@Column()
+ime: string;
 
 @Column()
+prezime: string;
+
+@Column()
+phoneNumber: string;
+
+@Column({unique: true})
 zdravstvenaKnjizica: string;
 
-@Column()
+@Column({unique: true})
 lbo: string;
 
 @Column()

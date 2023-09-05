@@ -1,7 +1,10 @@
 export declare class CreateUserDTO {
     username: string;
-    passwordHash: string;
+    password: string;
     email: string;
-    zdravstvenaKnjizica: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    zk: string;
     lbo: string;
 }

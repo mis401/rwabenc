@@ -4,6 +4,7 @@ import { CreateUserDTO } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
+type UserNoPassword = Omit<User, "passwordHash">;
 export declare class AuthService {
     private userService;
     private jwtService;
@@ -16,11 +17,15 @@ export declare class AuthService {
         id: number;
         username: string;
         email: string;
+        ime: string;
+        prezime: string;
+        phoneNumber: string;
         zdravstvenaKnjizica: string;
         lbo: string;
         role: import("./roles").Role;
     }>;
-    login(user: Partial<User>): Promise<{
+    login(user: UserNoPassword): Promise<{
         access_token: string;
     }>;
 }
+export {};
