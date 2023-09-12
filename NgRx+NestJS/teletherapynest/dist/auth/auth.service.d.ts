@@ -14,17 +14,23 @@ export declare class AuthService {
         access_token: string;
     } | HttpException>;
     validateUser(username: string, password: string): Promise<{
+        zdravstvenaKnjizica: string;
+        lbo: string;
+        participant: import("src/typeorm").Session[];
+        role: import("./roles").Role;
+        reviews: import("src/typeorm").Review[];
         id: number;
         username: string;
         email: string;
-        ime: string;
-        prezime: string;
+        firstName: string;
+        lastName: string;
         phoneNumber: string;
-        zdravstvenaKnjizica: string;
-        lbo: string;
-        role: import("./roles").Role;
+        messages: import("src/typeorm").Message[];
     }>;
     login(user: UserNoPassword): Promise<{
+        access_token: string;
+    }>;
+    loginDoc(licenceId: string): Promise<HttpException | {
         access_token: string;
     }>;
 }

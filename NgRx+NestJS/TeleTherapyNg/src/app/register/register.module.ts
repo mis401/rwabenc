@@ -6,6 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { userReducer } from '../store/user/user.reducer';
+import { Features } from 'src/Features';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { UserEffects } from '../store/user/user.effects';
 
 
 
@@ -21,6 +26,8 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    StoreModule.forFeature(Features.User, userReducer),
+    EffectsModule.forFeature([UserEffects]),
   ]
 })
 export class RegisterModule { }

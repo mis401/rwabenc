@@ -28,6 +28,9 @@ let AuthController = class AuthController {
     async register(newUser) {
         return await this.authService.register(newUser);
     }
+    async logInDoc(licenceId) {
+        return await this.authService.loginDoc(licenceId.licenceId);
+    }
 };
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
@@ -46,6 +49,14 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.CreateUserDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.Post)('login/doc'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "logInDoc", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

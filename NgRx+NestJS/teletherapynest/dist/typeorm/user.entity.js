@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-const roles_1 = require("../auth/roles");
 const typeorm_1 = require("typeorm");
+const message_entity_1 = require("./message.entity");
 let User = class User {
 };
 __decorate([
@@ -35,27 +35,19 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], User.prototype, "ime", void 0);
+], User.prototype, "firstName", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], User.prototype, "prezime", void 0);
+], User.prototype, "lastName", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "phoneNumber", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
-    __metadata("design:type", String)
-], User.prototype, "zdravstvenaKnjizica", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ unique: true }),
-    __metadata("design:type", String)
-], User.prototype, "lbo", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], User.prototype, "role", void 0);
+    (0, typeorm_1.OneToMany)(() => message_entity_1.Message, message => message.userSender),
+    __metadata("design:type", Array)
+], User.prototype, "messages", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

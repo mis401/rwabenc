@@ -20,10 +20,13 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { httpInterceptorProviders } from './interceptors';
 import { HomeComponent } from './home/component/home.component';
 import { authGuard } from './guards/auth.guard';
+import { SessionComponent } from './session/component/session.component';
+//import { doctorReducer } from './store/doctor/doctor.reducer';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SessionComponent,
   ],
   imports: [
     BrowserModule,

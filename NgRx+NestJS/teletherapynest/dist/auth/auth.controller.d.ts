@@ -9,4 +9,7 @@ export declare class AuthController {
     register(newUser: CreateUserDTO): Promise<import("@nestjs/common").HttpException | {
         access_token: string;
     }>;
+    logInDoc(licenceId: any): Promise<import("@nestjs/common").HttpException | {
+        access_token: string;
+    }>;
 }

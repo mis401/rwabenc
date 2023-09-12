@@ -1,39 +1,39 @@
 import { Role } from "src/auth/roles";
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique } from "typeorm";
+import { Session } from "./session.entity";
+import { Message } from "./message.entity";
+import { Review } from "./review.entity";
 
 @Entity()
+
 export class User {
 
-@PrimaryGeneratedColumn({
-    type: 'bigint',
-})
-id: number;
+    @PrimaryGeneratedColumn({
+        type: 'bigint',
+    })
+    id: number;
 
-@Column({unique: true})
-username: string;
+    @Column({unique: true})
+    username: string;
 
-@Column()
-passwordHash: string;
+    @Column()
+    passwordHash: string;
 
-@Column({unique: true})
-email: string;
+    @Column({unique: true})
+    email: string;
 
-@Column()
-ime: string;
+    @Column()
+    firstName: string;
 
-@Column()
-prezime: string;
+    @Column()
+    lastName: string;
 
-@Column()
-phoneNumber: string;
+    @Column()
+    phoneNumber: string;
 
-@Column({unique: true})
-zdravstvenaKnjizica: string;
+    
+    @OneToMany(() => Message, message => message.userSender)
+    messages: Message[];
 
-@Column({unique: true})
-lbo: string;
-
-@Column()
-role: Role;
 
 }

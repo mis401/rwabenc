@@ -11,6 +11,11 @@
                 <button mat-raised-button color="primary" class="ml-auto mr-2 my-auto" routerLink="/login">Ulogujte se</button>
                 <button mat-flat-button color="primary" class="ml-0 mr-auto my-auto" routerLink="/register">Registrujte se</button>
         </div>
+        <div>
+            <p class="text-slate-100 text-2xl">Da li ste lekar?</p>
+            <input matInput type="password" placeholder="Unesite broj licence" class="w-max mr-20" [(ngModel)]="licenceId">
+            <button mat-raised-button color="primary" [disabled]="!(licenceId.length > 0)" (click)="onDoctorLogin()" class="ml-0  my-2">Prijavite se</button>
+        </div>
     </div>
 </div>
 

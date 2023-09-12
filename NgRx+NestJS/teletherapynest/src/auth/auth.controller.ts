@@ -22,4 +22,10 @@ export class AuthController {
     async register(@Body() newUser: CreateUserDTO) {
         return await this.authService.register(newUser);
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('login/doc')
+    async logInDoc(@Body() licenceId) {
+        return await this.authService.loginDoc(licenceId.licenceId);
+    }
 }

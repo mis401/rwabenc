@@ -75,6 +75,18 @@ let AuthService = class AuthService {
             access_token: this.jwtService.sign(payload),
         };
     }
+    async loginDoc(licenceId) {
+        const doc = (await this.userService.findDoctorByLicence(licenceId));
+        console.log(doc);
+        if (doc == null || doc == undefined) {
+            return new common_1.HttpException("Unauthorized", 401);
+        }
+        delete doc.passwordHash;
+        const payload = { user: doc, sub: doc.id, role: doc.role };
+        return {
+            access_token: this.jwtService.sign(payload),
+        };
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),

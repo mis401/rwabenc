@@ -1,4 +1,10 @@
 import { User } from "./user.entity";
-declare const entities: (typeof User)[];
-export { User };
+import { Doctor } from "./doctor.entity";
+import { Message } from "./message.entity";
+import { Session } from "./session.entity";
+import { Conversation } from "./conversation.entity";
+import { Review } from "./review.entity";
+import { Patient } from "./patient.entity";
+declare const entities: (typeof Session | typeof Review | typeof Message | typeof Conversation)[];
+export { User, Doctor, Message, Session, Conversation, Review, Patient };
 export default entities;

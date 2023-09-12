@@ -20,8 +20,9 @@ const typeorm_3 = require("@nestjs/typeorm");
 const argon = require("argon2");
 const roles_1 = require("../auth/roles");
 let UserService = class UserService {
-    constructor(userRepo) {
-        this.userRepo = userRepo;
+    constructor(patientRepo, docRepo) {
+        this.patientRepo = patientRepo;
+        this.docRepo = docRepo;
     }
     async createUser(userToBeCreated) {
         try {
@@ -31,15 +32,18 @@ let UserService = class UserService {
                 username: userToBeCreated.username,
                 passwordHash: hash,
                 email: userToBeCreated.email,
-                ime: userToBeCreated.firstName,
-                prezime: userToBeCreated.lastName,
+                firstName: userToBeCreated.firstName,
+                lastName: userToBeCreated.lastName,
                 phoneNumber: userToBeCreated.phoneNumber,
                 zdravstvenaKnjizica: userToBeCreated.zk,
                 lbo: userToBeCreated.lbo,
-                role: roles_1.Role.Patient
+                role: roles_1.Role.Patient,
+                participant: [],
+                messages: [],
+                reviews: [],
             };
             console.log(user);
-            await this.userRepo.save(user);
+            await this.patientRepo.save(user);
             delete user.passwordHash;
             return user;
         }
@@ -48,20 +52,28 @@ let UserService = class UserService {
             throw new typeorm_2.TypeORMError(err);
         }
     }
-    findUserById(id) {
-        return this.userRepo.findOneBy({ id: id });
+    async findUserById(id) {
+        return await this.patientRepo.findOneBy({ id: id });
     }
-    findUserByUsername(username) {
-        return this.userRepo.findOneBy({ username: username });
+    async findUserByUsername(username) {
+        return await this.patientRepo.findOneBy({ username: username });
     }
     getUsers() {
-        return this.userRepo.find();
+        return this.patientRepo.find();
+    }
+    async findDoctorByLicence(licenceId) {
+        console.log(licenceId);
+        const doc = await this.docRepo.findOneBy({ licenceId });
+        console.log(doc);
+        return doc;
     }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_3.InjectRepository)(typeorm_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(0, (0, typeorm_3.InjectRepository)(typeorm_1.Patient)),
+    __param(1, (0, typeorm_3.InjectRepository)(typeorm_1.Doctor)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map
