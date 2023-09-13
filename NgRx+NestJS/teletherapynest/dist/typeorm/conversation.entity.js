@@ -21,7 +21,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Conversation.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => message_entity_1.Message, message => message.conversation),
+    (0, typeorm_1.OneToMany)(() => message_entity_1.Message, message => message.conversation, {
+        cascade: true,
+    }),
     __metadata("design:type", Array)
 ], Conversation.prototype, "messages", void 0);
 Conversation = __decorate([

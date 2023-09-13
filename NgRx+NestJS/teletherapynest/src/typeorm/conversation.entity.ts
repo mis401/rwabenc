@@ -12,7 +12,9 @@ export class Conversation {
     id: number;
 
 
-    @OneToMany(() => Message, message => message.conversation)
+    @OneToMany(() => Message, message => message.conversation, {
+        cascade: true,
+    })
     messages: Message[];
 
 }

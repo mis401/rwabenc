@@ -5,7 +5,7 @@ export declare class Session {
     id: number;
     name: string;
     description: string;
-    appointments: Date;
+    appointment: Date;
     doctor: Doctor;
     participants: Patient[];
     conversation: Conversation;

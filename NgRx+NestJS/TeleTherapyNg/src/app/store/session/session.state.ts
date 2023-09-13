@@ -1,9 +1,11 @@
-import { Session } from "src/app/models";
+import { Session, SessionBasic } from "src/app/models";
 
 export interface SessionState {
-    sessions: Session[],
+    sessions: SessionBasic[],
+    selectedSession: Session | null,
 }
 
 export const initialSessionState: SessionState = {
     sessions: [],
+    selectedSession: null,
 }

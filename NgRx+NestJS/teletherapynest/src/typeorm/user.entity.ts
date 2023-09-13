@@ -35,5 +35,7 @@ export class User {
     @OneToMany(() => Message, message => message.userSender)
     messages: Message[];
 
+    @Column()
+    role: Role;
 
 }

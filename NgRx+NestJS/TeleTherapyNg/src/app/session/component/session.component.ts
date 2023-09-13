@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./session.component.scss']
 })
 export class SessionComponent {
-
+  
 }

@@ -1,3 +1,4 @@
+import { Role } from "src/auth/roles";
 import { Message } from "./message.entity";
 export declare class User {
     id: number;
@@ -8,4 +9,5 @@ export declare class User {
     lastName: string;
     phoneNumber: string;
     messages: Message[];
+    role: Role;
 }

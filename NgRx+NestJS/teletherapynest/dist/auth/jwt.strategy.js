@@ -13,7 +13,8 @@ class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strate
         });
     }
     async validate(payload) {
-        return { userId: payload.sub, username: payload.username, role: payload.role };
+        console.log(payload.sub + " " + payload.role);
+        return { userId: payload.sub, user: payload.user, role: payload.role };
     }
 }
 exports.JwtStrategy = JwtStrategy;

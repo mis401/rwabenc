@@ -5,7 +5,7 @@ export interface Session {
     id: number;
     name: string;
     description: string;
-    appointments: Date[],
+    appointment: Date,
     participants: User[],
     doctor: User,
     conversation: Conversation;

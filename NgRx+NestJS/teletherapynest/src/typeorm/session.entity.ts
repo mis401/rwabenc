@@ -19,8 +19,8 @@ export class Session {
     @Column()
     description: string;
 
-    @Column({nullable: true})
-    appointments: Date;
+    @Column({nullable: true, type: 'timestamp'})
+    appointment: Date;
     
     @ManyToOne(() => Doctor, doctor => doctor.sessions)
     doctor: Doctor;
@@ -29,7 +29,9 @@ export class Session {
     @JoinTable()
     participants: Patient[];
 
-    @OneToOne(() => Conversation)
+    @OneToOne(() => Conversation, {
+        cascade: true,
+    })
     @JoinTable()
     conversation: Conversation;
 

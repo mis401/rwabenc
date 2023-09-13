@@ -31,9 +31,9 @@ __decorate([
     __metadata("design:type", String)
 ], Session.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true, type: 'timestamp' }),
     __metadata("design:type", Date)
-], Session.prototype, "appointments", void 0);
+], Session.prototype, "appointment", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => doctor_entity_1.Doctor, doctor => doctor.sessions),
     __metadata("design:type", doctor_entity_1.Doctor)
@@ -44,7 +44,9 @@ __decorate([
     __metadata("design:type", Array)
 ], Session.prototype, "participants", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => conversation_entity_1.Conversation),
+    (0, typeorm_1.OneToOne)(() => conversation_entity_1.Conversation, {
+        cascade: true,
+    }),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", conversation_entity_1.Conversation)
 ], Session.prototype, "conversation", void 0);

@@ -19,6 +19,5 @@ export class Doctor extends User {
     @OneToMany(() => Review, review => review.doctor)
     reviews: Review[];
 
-    @Column()
-    role: Role;
+
 }
