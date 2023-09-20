@@ -23,6 +23,10 @@ import { authGuard } from './guards/auth.guard';
 import { SessionComponent } from './session/component/session.component';
 import { AppState } from './store/state';
 import { sessionReducer } from './store/session/session.reducer';
+import { SessionModule } from './session/session.module';
+import { SessionPreviewModule } from './session-preview/session-preview.module';
+import { SessionListComponent, SessionListModule } from './session-list/session-list.module';
+import { HomeModule } from './home/home.module';
 //import { doctorReducer } from './store/doctor/doctor.reducer';
 
 export function persistanceReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -46,7 +50,6 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
 @NgModule({
   declarations: [
     AppComponent,
-    SessionComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,10 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
     LandingPageModule,
     LoginModule,
     RegisterModule,
+    SessionModule,
+    SessionPreviewModule,
+    SessionListModule,
+    HomeModule,
     HttpClientModule,
     StoreModule.forRoot({user: userReducer, session: sessionReducer}, {metaReducers}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
@@ -64,12 +71,13 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent},
       {path: 'home', component: HomeComponent, canActivate: [authGuard]},
-    ])
+    ]),
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'sr-sp'},
     httpInterceptorProviders,
   ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

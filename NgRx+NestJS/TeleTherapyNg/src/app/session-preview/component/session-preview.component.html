@@ -5,7 +5,8 @@
                 <h2>{{session.name}}</h2>
             </mat-card-title>
             <mat-card-subtitle>
-                <h3>{{session.appointment}}</h3>
+                <h3>{{session.appointment | date:'medium'}}</h3>
+            </mat-card-subtitle>
         </mat-card-header>
     </mat-card>
 </div>

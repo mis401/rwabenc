@@ -6,8 +6,9 @@ import { Features } from 'src/Features';
 import { SessionEffects } from '../store/session/session.effects';
 import { sessionReducer } from '../store/session/session.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { SessionPreviewModule } from '../session-preview/session-preview.module';
 
-
+export { SessionListComponent } from "./component/session-list.component"
 
 @NgModule({
   declarations: [
@@ -17,6 +18,10 @@ import { EffectsModule } from '@ngrx/effects';
     CommonModule,
     StoreModule.forFeature(Features.Session, sessionReducer),
     EffectsModule.forFeature([SessionEffects]),
+    SessionPreviewModule,
+  ],
+  exports: [
+    SessionListComponent
   ]
 })
 export class SessionListModule { }

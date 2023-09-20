@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { LoginService } from "../../login/service/login.service";
 import { Router } from "@angular/router";
 import { catchError, exhaustMap, map, of, switchMap, tap } from "rxjs";
-import { loginDoctor, loginDoctorFailure, loginDoctorSuccess, loginUser, loginUserFailure, loginUserSuccess, registerUser, registerUserSuccess } from "./user.actions";
+import { loginDoctor, loginDoctorFailure, loginDoctorSuccess, loginUser, loginUserFailure, loginUserSuccess, logout, registerUser, registerUserSuccess } from "./user.actions";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { RegisterService } from "src/app/register/service/register.service";
 
@@ -53,5 +53,12 @@ export class UserEffects {
             return loginDoctorSuccess({ user, token: token.access_token })}),
         catchError((error) => of(loginDoctorFailure({ error })))
         ))
-    ))
+    ));
+
+    redirectAfterLogOit$ = createEffect(() => this.actions$.pipe(
+        ofType(logout),
+        exhaustMap(() => this.router.navigate([""]))
+    ), { dispatch: false });
+
+
 }

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>
+    Otkazivanje sesije
+</h1>
+<mat-dialog-content>
+    <app-session-list [sessions]="sesije"></app-session-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="basic" mat-dialog-close cdkAutoFocus>Odustani</button>
+    <button mat-button color="warn">Nastavi</button>
+</mat-dialog-actions>

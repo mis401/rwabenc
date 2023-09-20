@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialUserState } from "./user.state";
-import { loginDoctorSuccess, loginUserFailure, loginUserSuccess, registerUserFailure, registerUserSuccess } from "./user.actions";
+import { loginDoctorSuccess, loginUserFailure, loginUserSuccess, logout, registerUserFailure, registerUserSuccess } from "./user.actions";
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 export const userReducer = createReducer(
@@ -9,6 +9,7 @@ export const userReducer = createReducer(
         ...state,
         token,
         user,
+        userId : user.id!,
         error: null,
     })),
     on(loginUserFailure, (state, { error }) => ({
@@ -20,6 +21,7 @@ export const userReducer = createReducer(
         ...state,
         token,
         user,
+        userId : user.id!,
         error: null,
     })),
     on(registerUserFailure, (state, { error }) => ({
@@ -30,6 +32,7 @@ export const userReducer = createReducer(
         ...state,
         token,
         user,
+        userId : user.id!,
         error: null,
     })),
     on(loginUserFailure, (state, { error }) => ({
@@ -37,4 +40,11 @@ export const userReducer = createReducer(
         user: null,
         error,
     })),
+    on(logout, (state, {}) => ({
+        ...state,
+        user: null,
+        token: null,
+        error: null,
+        userId: null
+    }))
 );

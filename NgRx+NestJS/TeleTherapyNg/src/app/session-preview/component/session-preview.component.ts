@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Session } from 'src/app/models';
+import { Session, SessionBasic } from 'src/app/models';
 
 @Component({
   selector: 'app-session-preview',
@@ -9,5 +9,5 @@ import { Session } from 'src/app/models';
 export class SessionPreviewComponent {
   
   
-  @Input() session: Session | undefined;
+  @Input() session: SessionBasic | undefined;
 }

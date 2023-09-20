@@ -4,18 +4,17 @@ import { Message } from "./message.model";
 import { Review } from "./review.model";
 
 export interface User {
- 
     email: string,
     username: string,
     firstName: string,
     lastName: string,
     phoneNumber: string,
-    id?: string,
+    id?: number,
     zk?: string,
     lbo?: string,
     licenceId: string;
     sessions?: Session[] | null;
     messages?: Message[] | null;
     reviews?: Review[] | null;
-    role?: Role,
+    role: Role,
 }

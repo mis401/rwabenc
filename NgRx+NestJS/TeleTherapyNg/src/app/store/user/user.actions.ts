@@ -16,3 +16,4 @@ export const loginDoctor = createAction("[Doctor] Login Doctor", props<{ licence
 export const loginDoctorSuccess = createAction("[Doctor] Login Doctor Success", props<{user: User, token: string}>());
 export const loginDoctorFailure = createAction("[Doctor] Login Doctor Failure", props<{error: any}>());
 
+export const logout = createAction("[User] Logout");
