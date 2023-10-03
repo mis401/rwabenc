@@ -1,7 +1,7 @@
 import { Role } from "src/auth/roles";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
-import { Doctor } from "./doctor.entity";
+// import { Doctor } from "./doctor.entity";
 import { Conversation } from "./conversation.entity";
 
 @Entity()

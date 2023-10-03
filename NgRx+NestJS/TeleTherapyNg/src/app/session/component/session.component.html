@@ -1,5 +1,42 @@
-<div>
-    <div class="w-7xl mx-auto">
+<div *ngIf="conversation != null && userId != null; else load" class="flex flex-row">
+    <div class="sm:w-full md:w-4/5 h-full chat">
+        <div #scrollable class="inner-chat">
+        <div class="chat-card">
+            <div *ngFor="let m of conversation.messages.slice()">
+                <div *ngIf="m.text != ''" style="margin-bottom: 10px">
+                    <div class="chat-msg-wrap receiver" *ngIf="m.userSender!.id != userId else sender">
+                        <div class="chat-msg">
+                                <p>{{m.text}}</p>
+                        </div> 
+                    </div>
+                    <ng-template #sender>
+                        <div class="chat-msg-wrap sender">
+                            <div class="chat-msg">
+                                    <p>{{m.text}}</p>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="akcije">
+                <div class="input-poruke">
+                    <mat-form-field style="width: 100%">
+                        <input matInput type="text" placeholder="Poruka" (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="reset" (click)="sendMessage()">
+                        Pošalji
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="">
 
+    </div>
 </div>
+</div>
+<ng-template #load>
+    <div class="load">
+        <mat-progress-spinner mode="indeterminate" class="spinner"></mat-progress-spinner>
+    </div>
+</ng-template>

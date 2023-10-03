@@ -10,11 +10,12 @@ export interface User {
     lastName: string,
     phoneNumber: string,
     id?: number,
-    zk?: string,
-    lbo?: string,
-    licenceId: string;
-    sessions?: Session[] | null;
+    zk?: string | null,
+    lbo?: string | null,
+    licenceId: string | null;
+    participant?: Session[] | null;
     messages?: Message[] | null;
-    reviews?: Review[] | null;
+    reviewsLeft?: Review[] | null;
+    reviewed?: Review[] | null;
     role: Role,
 }

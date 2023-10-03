@@ -1,9 +1,8 @@
-import { Doctor } from "./doctor.entity";
-import { Patient } from "./patient.entity";
+import { User } from "./user.entity";
 export declare class Review {
     id: number;
     text: string;
     date: Date;
-    patient: Patient;
-    doctor: Doctor;
+    patient: User;
+    doctor: User;
 }

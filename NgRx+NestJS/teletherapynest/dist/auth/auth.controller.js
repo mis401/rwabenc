@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const user_dto_1 = require("../user/user.dto");
 const local_guard_1 = require("./local.guard");
+const doctor_dto_1 = require("../user/doctor.dto");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -27,6 +28,9 @@ let AuthController = class AuthController {
     }
     async register(newUser) {
         return await this.authService.register(newUser);
+    }
+    async registerDoctor(newDoctor) {
+        return await this.authService.registerDoc(newDoctor);
     }
     async logInDoc(licenceId) {
         return await this.authService.loginDoc(licenceId.licenceId);
@@ -49,6 +53,13 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.CreateUserDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)('register/doc'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [doctor_dto_1.DoctorDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "registerDoctor", null);
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.Post)('login/doc'),

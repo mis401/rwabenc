@@ -11,8 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Review = void 0;
 const typeorm_1 = require("typeorm");
-const doctor_entity_1 = require("./doctor.entity");
-const patient_entity_1 = require("./patient.entity");
+const user_entity_1 = require("./user.entity");
 let Review = class Review {
 };
 __decorate([
@@ -32,12 +31,12 @@ __decorate([
     __metadata("design:type", Date)
 ], Review.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => patient_entity_1.Patient, patient => patient.reviews),
-    __metadata("design:type", patient_entity_1.Patient)
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, patient => patient.reviewsLeft),
+    __metadata("design:type", user_entity_1.User)
 ], Review.prototype, "patient", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => doctor_entity_1.Doctor, doctor => doctor.reviews),
-    __metadata("design:type", doctor_entity_1.Doctor)
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, doctor => doctor.reviewed),
+    __metadata("design:type", user_entity_1.User)
 ], Review.prototype, "doctor", void 0);
 Review = __decorate([
     (0, typeorm_1.Entity)()

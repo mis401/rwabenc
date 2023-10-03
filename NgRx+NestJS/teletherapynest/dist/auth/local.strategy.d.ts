@@ -5,11 +5,6 @@ export declare class LocalStrategy extends LocalStrategy_base {
     private authService;
     constructor(authService: AuthService);
     validate(username: string, password: string): Promise<{
-        zdravstvenaKnjizica: string;
-        lbo: string;
-        participant: import("../typeorm").Session[];
-        role: import("./roles").Role;
-        reviews: import("../typeorm").Review[];
         id: number;
         username: string;
         email: string;
@@ -17,6 +12,14 @@ export declare class LocalStrategy extends LocalStrategy_base {
         lastName: string;
         phoneNumber: string;
         messages: import("../typeorm").Message[];
+        role: import("./roles").Role;
+        zdravstvenaKnjizica: string;
+        lbo: string;
+        participant: import("../typeorm").Session[];
+        sessionsLed: import("../typeorm").Session[];
+        reviewsLeft: import("../typeorm").Review[];
+        licenceId: string;
+        reviewed: import("../typeorm").Review[];
     }>;
 }
 export {};

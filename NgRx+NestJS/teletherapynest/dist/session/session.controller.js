@@ -23,6 +23,9 @@ let SessionController = class SessionController {
     async getSessionsForUser(req) {
         return await this.sessionService.getSessionsForUser(req.user.userId, req.user.role);
     }
+    async getSession(id) {
+        return await this.sessionService.getSession(id);
+    }
     async createSession(sesDTO) {
         return await this.sessionService.createSession(sesDTO);
     }
@@ -38,6 +41,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SessionController.prototype, "getSessionsForUser", null);
+__decorate([
+    (0, common_1.Get)('getSession/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], SessionController.prototype, "getSession", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)('createSession'),

@@ -70,7 +70,7 @@ let AuthService = class AuthService {
         return null;
     }
     async login(user) {
-        const payload = { user: user, sub: user.id, role: user.role };
+        const payload = { user: user, sub: user.id, role: user.role, };
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -86,6 +86,15 @@ let AuthService = class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+    async registerDoc(newDoctor) {
+        try {
+            const doc = await this.userService.createDoctor(newDoctor);
+            return await this.login(doc);
+        }
+        catch (e) {
+            return new common_1.HttpException("Error creating doctor", 501);
+        }
     }
 };
 AuthService = __decorate([

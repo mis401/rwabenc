@@ -1,8 +1,8 @@
 export interface SessionDTO {
     name: string;
     description: string;
-    doctorId: number;
     appointment: Date;
-    participantsId: number[];
-    conversationId: number;
+    doctorId: number;
+    participantsId?: number[];
+    conversationId?: number;
 }

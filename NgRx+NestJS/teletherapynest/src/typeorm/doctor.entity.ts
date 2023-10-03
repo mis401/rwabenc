@@ -6,18 +6,18 @@ import { Message } from "./message.entity";
 import { Review } from "./review.entity";
 import { User } from "./user.entity";
 
-@Entity()
-export class Doctor extends User {
+// @Entity()
+// export class Doctor extends User {
 
-    @Column({
-    })
-    licenceId: string;
+//     @Column({
+//     })
+//     licenceId: string;
 
-    @OneToMany(() => Session, session => session.doctor)
-    sessions: Session[];
+//     @OneToMany(() => Session, session => session.doctor)
+//     sessions: Session[];
 
-    @OneToMany(() => Review, review => review.doctor)
-    reviews: Review[];
+//     @OneToMany(() => Review, review => review.doctor)
+//     reviews: Review[];
 
 
-}
+// }

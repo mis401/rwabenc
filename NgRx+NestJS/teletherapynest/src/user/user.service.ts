@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Doctor, Patient, User } from 'src/typeorm';
+import { User } from 'src/typeorm';
 import { Repository, TypeORMError } from 'typeorm';
 import { CreateUserDTO } from './user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as argon from "argon2";
 import { Role } from 'src/auth/roles';
+import { DoctorDTO } from './doctor.dto';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(Patient) private  patientRepo: Repository<Patient>,
-        @InjectRepository(Doctor) private docRepo: Repository<Doctor>,
+        @InjectRepository(User) private userRepo: Repository<User>
         ) {}
     async createUser(userToBeCreated : CreateUserDTO){
         try{
         const hash = await argon.hash(userToBeCreated.password);
-        const user : Patient = {
+        const user : User = {
             id: 0,
             username: userToBeCreated.username,
             passwordHash: hash,
@@ -28,24 +28,15 @@ export class UserService {
             role: Role.Patient,
             participant: [],
             messages: [],
-            reviews: [],
+            reviewsLeft: [],
+            reviewed: null,
+            licenceId: null,
+            sessionsLed: null
         }
         console.log(user);
-        await this.patientRepo.save(user);
+        await this.userRepo.save(user);
         delete user.passwordHash;
-        // await this.docRepo.save({
-        //     username: 'somix',
-        //     passwordHash: hash,
-        //     email: '',
-        //     firstName: 'Somix',
-        //     lastName: 'Benc',
-        //     phoneNumber: '123456789',
-        //     licenceId: 'licenca',
-        //     role: Role.Doctor,
-        //     sessions: [],
-        //     messages: [],
-        //     reviews: [],
-        // })
+
         return user;
         }
         catch(err){
@@ -54,23 +45,54 @@ export class UserService {
         }
     }
 
+    async createDoctor(newDoctor: DoctorDTO){
+        try{
+            const hash = await argon.hash(newDoctor.password);
+            const createdDoc = await this.userRepo.save({
+            id: 0,
+            username: newDoctor.username,
+            passwordHash: hash,
+            email: newDoctor.email,
+            firstName: newDoctor.firstName,
+            lastName: newDoctor.lastName,
+            phoneNumber: newDoctor.phoneNumber,
+            zdravstvenaKnjizica:null,
+            lbo: null,
+            role: Role.Doctor,
+            participant: [],
+            messages: [],
+            reviewsLeft: null,
+            reviewed: [],
+            licenceId: newDoctor.licenceId,
+            sessionsLed: []
+            })
+            console.log(createdDoc);
+            delete createdDoc.passwordHash;
+            return createdDoc; 
+        }
+        catch(e){
+            console.log(e);
+            throw new TypeORMError(e);
+        }
+    }
+
     async findUserById(id : number){
-        return await this.patientRepo.findOneBy({id: id});
+        return await this.userRepo.findOneBy({id: id});
     }
 
     async findUserByUsername(username: string){
-        return await this.patientRepo.findOneBy({username: username});
+        return await this.userRepo.findOneBy({username: username});
     }
 
     getUsers(){
-        return this.patientRepo.find();
+        return this.userRepo.find();
     }
 
 
     async findDoctorByLicence(licenceId: string){
         console.log(licenceId);
 
-        const doc = await this.docRepo.findOneBy({licenceId});
+        const doc = await this.userRepo.findOneBy({licenceId});
         console.log(doc);
         return doc;
     }

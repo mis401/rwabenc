@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from 'src/auth/roles';
-import { Conversation, Doctor, Patient, Session, User } from 'src/typeorm';
+import { Conversation, Session, User } from 'src/typeorm';
 import { ArrayContains, In, Repository } from 'typeorm';
 import { SessionDTO } from './session.dto';
 
@@ -9,15 +9,19 @@ import { SessionDTO } from './session.dto';
 export class SessionService {
     constructor(
         @InjectRepository(Session) private sesRepo: Repository<Session>,
-        @InjectRepository(Patient) private patientRepo: Repository<Patient>,
-        @InjectRepository(Doctor) private doctorRepo: Repository<Doctor>,
         @InjectRepository(User) private userRepo: Repository<User>,
     ) {}
 
 
     async createSession(sesDTO: SessionDTO){
-        const doctor = await this.doctorRepo.findOne({where: {id: sesDTO.doctorId}});
-        if(!doctor) throw new Error('Doctor not found');
+        const doctor = await this.userRepo.findOne({where: {id: sesDTO.doctorId}});
+        if (doctor && doctor.role !== Role.Doctor){
+            return new HttpException("No such doctor", 501);
+        }
+        if (!doctor) {
+            throw new HttpException("No doctor found", 501);
+        }
+        console.log(doctor);
 
         const session = await this.sesRepo.save({
             doctor: doctor,
@@ -34,7 +38,7 @@ export class SessionService {
         const session = await this.sesRepo.findOne({where: {id: sessionId}, relations: {participants: true}});
         if(!session) throw new Error('Session not found');
 
-        const patient = await this.patientRepo.findOne({where: {id: userId}});
+        const patient = await this.userRepo.findOne({where: {id: userId}});
         if(!patient) throw new Error('User not found');
 
         if(patient.role === Role.Patient){
@@ -46,22 +50,19 @@ export class SessionService {
     }
 
     async getSessionsForUser(userId: number, role: Role) {
-        let userSearch;
-        if(role === Role.Patient){
-            userSearch = await this.patientRepo.findOne({where: {id: userId}});
-        }
-        else if(role === Role.Doctor){
-            userSearch = await this.doctorRepo.findOne({where: {id: userId}});
-        }
-        const user = userSearch;
+   
+        const user = await this.userRepo.findOne({where: {id: userId}, relations: {participant: true}});
         if(!user) throw new Error('User not found');
-
-        if(user.role === Role.Patient){
-            return await this.sesRepo.find({relations: {doctor: true}, where: {participants: { id: user.id}}});
-        }
-        else if(user.role === Role.Doctor){
-            return await this.sesRepo.find({where: {doctor: user}});
-        }
+        return user.participant;
     }
 
+    async getSession(id: number){
+        console.log("In getSession");
+        console.log(id);
+        const session = await this.sesRepo.findOne({where: {id: id}, relations: {doctor: true, participants: true, conversation: true}})
+        if (session)
+            return session;
+        else
+            return new HttpException(`No session found with id ${id}`, 501);
+    }
 }

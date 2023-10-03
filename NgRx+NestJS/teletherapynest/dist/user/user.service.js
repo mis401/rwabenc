@@ -20,9 +20,8 @@ const typeorm_3 = require("@nestjs/typeorm");
 const argon = require("argon2");
 const roles_1 = require("../auth/roles");
 let UserService = class UserService {
-    constructor(patientRepo, docRepo) {
-        this.patientRepo = patientRepo;
-        this.docRepo = docRepo;
+    constructor(userRepo) {
+        this.userRepo = userRepo;
     }
     async createUser(userToBeCreated) {
         try {
@@ -40,10 +39,13 @@ let UserService = class UserService {
                 role: roles_1.Role.Patient,
                 participant: [],
                 messages: [],
-                reviews: [],
+                reviewsLeft: [],
+                reviewed: null,
+                licenceId: null,
+                sessionsLed: null
             };
             console.log(user);
-            await this.patientRepo.save(user);
+            await this.userRepo.save(user);
             delete user.passwordHash;
             return user;
         }
@@ -52,28 +54,56 @@ let UserService = class UserService {
             throw new typeorm_2.TypeORMError(err);
         }
     }
+    async createDoctor(newDoctor) {
+        try {
+            const hash = await argon.hash(newDoctor.password);
+            const createdDoc = await this.userRepo.save({
+                id: 0,
+                username: newDoctor.username,
+                passwordHash: hash,
+                email: newDoctor.email,
+                firstName: newDoctor.firstName,
+                lastName: newDoctor.lastName,
+                phoneNumber: newDoctor.phoneNumber,
+                zdravstvenaKnjizica: null,
+                lbo: null,
+                role: roles_1.Role.Doctor,
+                participant: [],
+                messages: [],
+                reviewsLeft: null,
+                reviewed: [],
+                licenceId: newDoctor.licenceId,
+                sessionsLed: []
+            });
+            console.log(createdDoc);
+            delete createdDoc.passwordHash;
+            return createdDoc;
+        }
+        catch (e) {
+            console.log(e);
+            throw new typeorm_2.TypeORMError(e);
+        }
+    }
     async findUserById(id) {
-        return await this.patientRepo.findOneBy({ id: id });
+        return await this.userRepo.findOneBy({ id: id });
     }
     async findUserByUsername(username) {
-        return await this.patientRepo.findOneBy({ username: username });
+        return await this.userRepo.findOneBy({ username: username });
     }
     getUsers() {
-        return this.patientRepo.find();
+        return this.userRepo.find();
     }
     async findDoctorByLicence(licenceId) {
         console.log(licenceId);
-        const doc = await this.docRepo.findOneBy({ licenceId });
+        const doc = await this.userRepo.findOneBy({ licenceId });
         console.log(doc);
         return doc;
     }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_3.InjectRepository)(typeorm_1.Patient)),
-    __param(1, (0, typeorm_3.InjectRepository)(typeorm_1.Doctor)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository])
+    __param(0, (0, typeorm_3.InjectRepository)(typeorm_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

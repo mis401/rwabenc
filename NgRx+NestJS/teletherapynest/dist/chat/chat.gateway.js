@@ -19,17 +19,34 @@ const typeorm_2 = require("../typeorm");
 const typeorm_3 = require("typeorm");
 const socket_io_1 = require("socket.io");
 let ChatGateway = class ChatGateway {
-    constructor(sessRepo, patientRepo, doctorRepo, userRepo, convoRepo) {
+    constructor(sessRepo, userRepo, convoRepo, msgRepo) {
         this.sessRepo = sessRepo;
-        this.patientRepo = patientRepo;
-        this.doctorRepo = doctorRepo;
         this.userRepo = userRepo;
         this.convoRepo = convoRepo;
-        this.users = new Map();
+        this.msgRepo = msgRepo;
+        this.users = [];
     }
     async handleConnect(data) {
+        this.server.socketsJoin(`${data.conversation}`);
         const response = "Uspesno povezan na server";
-        console.log("Povezan na server");
+        console.log("Povezan na server " + data.user + data.conversation);
+        this.users.push(data.user);
+    }
+    async handleMessage(msg) {
+        const conversation = await this.convoRepo.findOne({ where: { id: msg.conversation } });
+        const user = await this.userRepo.findOne({ where: { id: msg.userSender } });
+        const date = new Date();
+        const newMsg = {
+            id: 0,
+            text: msg.text,
+            userSender: user,
+            date,
+            conversation
+        };
+        const savedMsg = await this.msgRepo.save(newMsg);
+        this.server.to(`${msg.conversation}`).emit(`messageFromServer`, savedMsg);
+        console.log(savedMsg);
+        console.log(this.server.sockets.adapter.socketRooms());
     }
 };
 __decorate([
@@ -37,12 +54,19 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], ChatGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('connect'),
+    (0, websockets_1.SubscribeMessage)('connectUser'),
     __param(0, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "handleConnect", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(`messageFromUser`),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "handleMessage", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
@@ -50,12 +74,10 @@ ChatGateway = __decorate([
         }
     }),
     __param(0, (0, typeorm_1.InjectRepository)(typeorm_2.Session)),
-    __param(1, (0, typeorm_1.InjectRepository)(typeorm_2.Patient)),
-    __param(2, (0, typeorm_1.InjectRepository)(typeorm_2.Doctor)),
+    __param(1, (0, typeorm_1.InjectRepository)(typeorm_2.User)),
+    __param(2, (0, typeorm_1.InjectRepository)(typeorm_2.Conversation)),
     __param(3, (0, typeorm_1.InjectRepository)(typeorm_2.Message)),
-    __param(4, (0, typeorm_1.InjectRepository)(typeorm_2.Conversation)),
     __metadata("design:paramtypes", [typeorm_3.Repository,
-        typeorm_3.Repository,
         typeorm_3.Repository,
         typeorm_3.Repository,
         typeorm_3.Repository])

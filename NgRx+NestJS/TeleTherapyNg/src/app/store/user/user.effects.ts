@@ -55,7 +55,7 @@ export class UserEffects {
         ))
     ));
 
-    redirectAfterLogOit$ = createEffect(() => this.actions$.pipe(
+    redirectAfterLogOut$ = createEffect(() => this.actions$.pipe(
         ofType(logout),
         exhaustMap(() => this.router.navigate([""]))
     ), { dispatch: false });

@@ -19,7 +19,7 @@ UserModule = __decorate([
         providers: [user_service_1.UserService],
         exports: [user_service_1.UserService],
         controllers: [user_controller_1.UserController],
-        imports: [typeorm_1.TypeOrmModule.forFeature([typeorm_2.Patient, typeorm_2.Doctor])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([typeorm_2.User])],
     })
 ], UserModule);
 exports.UserModule = UserModule;

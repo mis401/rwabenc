@@ -12,7 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const roles_1 = require("../auth/roles");
 const typeorm_1 = require("typeorm");
+const session_entity_1 = require("./session.entity");
 const message_entity_1 = require("./message.entity");
+const review_entity_1 = require("./review.entity");
 let User = class User {
 };
 __decorate([
@@ -53,6 +55,35 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "zdravstvenaKnjizica", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "lbo", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => session_entity_1.Session, session => session.participants),
+    __metadata("design:type", Array)
+], User.prototype, "participant", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => session_entity_1.Session, session => session.doctor, { nullable: true }),
+    __metadata("design:type", Array)
+], User.prototype, "sessionsLed", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, review => review.patient),
+    __metadata("design:type", Array)
+], User.prototype, "reviewsLeft", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true
+    }),
+    __metadata("design:type", String)
+], User.prototype, "licenceId", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, review => review.doctor),
+    __metadata("design:type", Array)
+], User.prototype, "reviewed", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './login.dto';
 import { HttpService } from '@nestjs/axios';
 import { catchError, lastValueFrom } from 'rxjs';
+import { DoctorDTO } from 'src/user/doctor.dto';
 
 type UserNoPassword = Omit<User, "passwordHash">;
 
@@ -65,7 +66,7 @@ export class AuthService {
     }
 
     async login(user: UserNoPassword){
-        const payload = {user: user, sub: user.id, role: user.role};
+        const payload = {user: user, sub: user.id, role: user.role, };
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -82,5 +83,15 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    async registerDoc(newDoctor: DoctorDTO){
+        try{
+        const doc = await this.userService.createDoctor(newDoctor);
+        return await this.login(doc);
+        }
+        catch(e){
+            return new HttpException("Error creating doctor", 501);
+        }
     }
 }

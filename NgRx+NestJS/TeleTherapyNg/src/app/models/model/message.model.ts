@@ -5,10 +5,10 @@ import { Conversation } from "./conversation.model";
 
 export interface Message {
 
-    id: number;
+    id?: number;
     text: string;
     userSender?: User;
     date: Date;
-    conversation: Conversation;
+    conversation?: Conversation;
 
 }

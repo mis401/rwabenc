@@ -19,16 +19,19 @@ const roles_1 = require("../auth/roles");
 const typeorm_2 = require("../typeorm");
 const typeorm_3 = require("typeorm");
 let SessionService = class SessionService {
-    constructor(sesRepo, patientRepo, doctorRepo, userRepo) {
+    constructor(sesRepo, userRepo) {
         this.sesRepo = sesRepo;
-        this.patientRepo = patientRepo;
-        this.doctorRepo = doctorRepo;
         this.userRepo = userRepo;
     }
     async createSession(sesDTO) {
-        const doctor = await this.doctorRepo.findOne({ where: { id: sesDTO.doctorId } });
-        if (!doctor)
-            throw new Error('Doctor not found');
+        const doctor = await this.userRepo.findOne({ where: { id: sesDTO.doctorId } });
+        if (doctor && doctor.role !== roles_1.Role.Doctor) {
+            return new common_1.HttpException("No such doctor", 501);
+        }
+        if (!doctor) {
+            throw new common_1.HttpException("No doctor found", 501);
+        }
+        console.log(doctor);
         const session = await this.sesRepo.save({
             doctor: doctor,
             name: sesDTO.name,
@@ -43,7 +46,7 @@ let SessionService = class SessionService {
         const session = await this.sesRepo.findOne({ where: { id: sessionId }, relations: { participants: true } });
         if (!session)
             throw new Error('Session not found');
-        const patient = await this.patientRepo.findOne({ where: { id: userId } });
+        const patient = await this.userRepo.findOne({ where: { id: userId } });
         if (!patient)
             throw new Error('User not found');
         if (patient.role === roles_1.Role.Patient) {
@@ -55,33 +58,26 @@ let SessionService = class SessionService {
             throw new Error('Only patients can sign up for sessions');
     }
     async getSessionsForUser(userId, role) {
-        let userSearch;
-        if (role === roles_1.Role.Patient) {
-            userSearch = await this.patientRepo.findOne({ where: { id: userId } });
-        }
-        else if (role === roles_1.Role.Doctor) {
-            userSearch = await this.doctorRepo.findOne({ where: { id: userId } });
-        }
-        const user = userSearch;
+        const user = await this.userRepo.findOne({ where: { id: userId }, relations: { participant: true } });
         if (!user)
             throw new Error('User not found');
-        if (user.role === roles_1.Role.Patient) {
-            return await this.sesRepo.find({ relations: { doctor: true }, where: { participants: { id: user.id } } });
-        }
-        else if (user.role === roles_1.Role.Doctor) {
-            return await this.sesRepo.find({ where: { doctor: user } });
-        }
+        return user.participant;
+    }
+    async getSession(id) {
+        console.log("In getSession");
+        console.log(id);
+        const session = await this.sesRepo.findOne({ where: { id: id }, relations: { doctor: true, participants: true, conversation: true } });
+        if (session)
+            return session;
+        else
+            return new common_1.HttpException(`No session found with id ${id}`, 501);
     }
 };
 SessionService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(typeorm_2.Session)),
-    __param(1, (0, typeorm_1.InjectRepository)(typeorm_2.Patient)),
-    __param(2, (0, typeorm_1.InjectRepository)(typeorm_2.Doctor)),
-    __param(3, (0, typeorm_1.InjectRepository)(typeorm_2.User)),
+    __param(1, (0, typeorm_1.InjectRepository)(typeorm_2.User)),
     __metadata("design:paramtypes", [typeorm_3.Repository,
-        typeorm_3.Repository,
-        typeorm_3.Repository,
         typeorm_3.Repository])
 ], SessionService);
 exports.SessionService = SessionService;

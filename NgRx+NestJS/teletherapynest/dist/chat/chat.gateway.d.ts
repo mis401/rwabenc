@@ -1,14 +1,16 @@
-import { Conversation, Doctor, Message, Patient, Session, User } from 'src/typeorm';
+import { Conversation, Message, Session, User } from 'src/typeorm';
 import { Repository } from 'typeorm';
 import { Server } from 'socket.io';
+import { MessageDTO } from './message.dto';
+import { UserConversation } from './userconversation.dto';
 export declare class ChatGateway {
     private sessRepo;
-    private patientRepo;
-    private doctorRepo;
     private userRepo;
     private convoRepo;
-    constructor(sessRepo: Repository<Session>, patientRepo: Repository<Patient>, doctorRepo: Repository<Doctor>, userRepo: Repository<Message>, convoRepo: Repository<Conversation>);
+    private msgRepo;
+    constructor(sessRepo: Repository<Session>, userRepo: Repository<User>, convoRepo: Repository<Conversation>, msgRepo: Repository<Message>);
     server: Server;
-    users: Map<string, User>;
-    handleConnect(data: string): Promise<void>;
+    users: number[];
+    handleConnect(data: UserConversation): Promise<void>;
+    handleMessage(msg: MessageDTO): Promise<void>;
 }

@@ -38,4 +38,30 @@ export class User {
     @Column()
     role: Role;
 
+    //patient
+
+    @Column({unique: true, nullable: true})
+    zdravstvenaKnjizica: string;
+
+    @Column({unique: true, nullable: true})
+    lbo: string;
+
+    @ManyToMany(() => Session, session => session.participants)
+    participant: Session[];
+
+    @OneToMany(() => Session, session => session.doctor, {nullable: true})
+    sessionsLed: Session[];
+
+    @OneToMany(() => Review, review => review.patient)
+    reviewsLeft: Review[];
+    
+    //doctor
+    @Column({nullable: true
+    })
+    licenceId: string;
+
+    @OneToMany(() => Review, review => review.doctor)
+    reviewed: Review[];
+        
+
 }

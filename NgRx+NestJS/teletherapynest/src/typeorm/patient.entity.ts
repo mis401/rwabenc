@@ -5,22 +5,22 @@ import { Message } from "./message.entity";
 import { Review } from "./review.entity";
 import { User } from "./user.entity";
 
-@Entity()
-export class Patient extends User{
-    @Column({unique: true})
-    zdravstvenaKnjizica: string;
+// @Entity()
+// export class Patient extends User{
+//     @Column({unique: true})
+//     zdravstvenaKnjizica: string;
 
-    @Column({unique: true})
-    lbo: string;
+//     @Column({unique: true})
+//     lbo: string;
 
-    @ManyToMany(() => Session, session => session.participants)
-    participant: Session[];
+//     @ManyToMany(() => Session, session => session.participants)
+//     participant: Session[];
 
-    @Column()
-    role: Role;
+//     @Column()
+//     role: Role;
 
-    @OneToMany(() => Review, review => review.patient)
-    reviews: Review[];
+//     @OneToMany(() => Review, review => review.patient)
+//     reviews: Review[];
     
         
-}
+// }

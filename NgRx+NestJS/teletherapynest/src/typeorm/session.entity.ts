@@ -1,9 +1,9 @@
 import { type } from "os";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
-import { Doctor } from "./doctor.entity";
+// import { Doctor } from "./doctor.entity";
 import { Conversation } from "./conversation.entity";
-import { Patient } from "./patient.entity";
+// import { Patient } from "./patient.entity";
 
 @Entity()
 export class Session {
@@ -21,18 +21,18 @@ export class Session {
 
     @Column({nullable: true, type: 'timestamp'})
     appointment: Date;
-    
-    @ManyToOne(() => Doctor, doctor => doctor.sessions)
-    doctor: Doctor;
 
-    @ManyToMany(() => Patient, patient => patient.participant)
+    @ManyToOne(() => User, doctor => doctor.sessionsLed)
+    doctor: User
+    
+    @ManyToMany(() => User, patient => patient.participant)
     @JoinTable()
-    participants: Patient[];
+    participants: User[];
 
     @OneToOne(() => Conversation, {
         cascade: true,
     })
-    @JoinTable()
+    @JoinColumn()
     conversation: Conversation;
 
 }

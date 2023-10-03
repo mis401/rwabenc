@@ -1,5 +1,7 @@
-<div class="flex flex-row flex-wrap">
-    <div *ngIf="sessions.length>0">
-        <app-session-preview *ngFor="let session of sessions" [session]="session"></app-session-preview>
+<div *ngIf="(sessionsSelector$ | async) as sessions">
+    <div class="flex flex-row flex-wrap">
+        <div *ngIf="sessions.length>0">
+            <app-session-preview *ngFor="let session of sessions" [session]="session" (click)="selected(session)"></app-session-preview>
+        </div>
     </div>
 </div>

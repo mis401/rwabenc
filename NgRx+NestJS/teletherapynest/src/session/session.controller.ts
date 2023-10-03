@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Request, Body, Post } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Body, Post, Param } from '@nestjs/common';
 import { SessionService } from './session.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { SessionDTO } from './session.dto';
@@ -11,6 +11,12 @@ export class SessionController {
     @UseGuards(JwtAuthGuard)
     async getSessionsForUser(@Request() req){
         return await this.sessionService.getSessionsForUser(req.user.userId, req.user.role);
+    }
+
+    @Get('getSession/:id')
+    @UseGuards(JwtAuthGuard)
+    async getSession(@Param('id') id: number) {
+        return await this.sessionService.getSession(id);
     }
     
     @UseGuards(JwtAuthGuard)

@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { initialSessionState } from "./session.state";
-import { loadUserSessions, loadUserSessionsFailure, loadUserSessionsSuccess, sessionSelectedFailure, sessionSelectedSuccess } from "./session.actions";
+import { loadMessagesSuccess, loadUserSessions, loadUserSessionsFailure, loadUserSessionsSuccess, sessionSelectedFailure, sessionSelectedSuccess } from "./session.actions";
 import { selectSelectedSession } from "./session.selectors";
 
 export const sessionReducer = createReducer(
@@ -24,6 +24,10 @@ export const sessionReducer = createReducer(
         ...state,
         selectedSession: null,
         error,
+    })),
+    on(loadMessagesSuccess, (state, {conv}) => ({
+        ...state,
+        conversation: conv
     }))
 
 

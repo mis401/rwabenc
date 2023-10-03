@@ -18,7 +18,7 @@ SessionModule = __decorate([
     (0, common_1.Module)({
         controllers: [session_controller_1.SessionController],
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([typeorm_2.Session, typeorm_2.Patient, typeorm_2.Doctor, typeorm_2.User]),
+            typeorm_1.TypeOrmModule.forFeature([typeorm_2.Session, typeorm_2.User]),
         ],
         providers: [session_service_1.SessionService]
     })

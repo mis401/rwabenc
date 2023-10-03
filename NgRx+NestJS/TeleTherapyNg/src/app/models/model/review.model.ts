@@ -6,6 +6,6 @@ export interface Review
     id: number;
     text: string;
     date: Date;
-    user: User;
-    doctor: Doctor;
+    patient: User;
+    doctor: User;
 }

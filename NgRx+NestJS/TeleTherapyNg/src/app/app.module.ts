@@ -71,6 +71,8 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent},
       {path: 'home', component: HomeComponent, canActivate: [authGuard]},
+      {path: 'session/:id', component: SessionComponent, canActivate: [authGuard]},
+      {path: '**', component: LandingPageComponent}
     ]),
   ],
   providers: [

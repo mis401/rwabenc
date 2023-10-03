@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
-import { Doctor } from "./doctor.entity";
-import { Patient } from "./patient.entity";
+// import { Doctor } from "./doctor.entity";
+// import { Patient } from "./patient.entity";
 
 @Entity()
 export class Review {
@@ -19,9 +19,9 @@ export class Review {
     @Column()
     date: Date;
 
-    @ManyToOne(() => Patient, patient => patient.reviews)
-    patient: Patient;
+    @ManyToOne(() => User, patient => patient.reviewsLeft)
+    patient: User;
 
-    @ManyToOne(() => Doctor, doctor => doctor.reviews)
-    doctor: Doctor;
+    @ManyToOne(() => User, doctor => doctor.reviewed)
+    doctor: User;
 }

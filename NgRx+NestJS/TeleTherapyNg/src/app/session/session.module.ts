@@ -8,7 +8,10 @@ import { sessionReducer } from '../store/session/session.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { SessionEffects } from '../store/session/session.effects';
 import { SessionService } from './services/session.service';
-
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -19,6 +22,10 @@ import { SessionService } from './services/session.service';
     CommonModule,
     StoreModule.forFeature(Features.Session, sessionReducer),
     EffectsModule.forFeature([SessionEffects]),
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     SessionService,

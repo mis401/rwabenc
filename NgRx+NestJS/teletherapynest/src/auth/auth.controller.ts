@@ -4,6 +4,7 @@ import { LoginDTO } from './login.dto';
 import { CreateUserDTO } from 'src/user/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './local.guard';
+import { DoctorDTO } from 'src/user/doctor.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +22,11 @@ export class AuthController {
     @Post('register')
     async register(@Body() newUser: CreateUserDTO) {
         return await this.authService.register(newUser);
+    }
+
+    @Post('register/doc')
+    async registerDoctor(@Body() newDoctor: DoctorDTO){
+        return await this.authService.registerDoc(newDoctor);
     }
 
     @HttpCode(HttpStatus.OK)

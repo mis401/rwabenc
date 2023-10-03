@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Message } from "./message.entity";
 import { Session } from "./session.entity";
 
@@ -10,6 +10,7 @@ export class Conversation {
         type: 'bigint'
     })
     id: number;
+
 
 
     @OneToMany(() => Message, message => message.conversation, {

@@ -11,9 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Session = void 0;
 const typeorm_1 = require("typeorm");
-const doctor_entity_1 = require("./doctor.entity");
+const user_entity_1 = require("./user.entity");
 const conversation_entity_1 = require("./conversation.entity");
-const patient_entity_1 = require("./patient.entity");
 let Session = class Session {
 };
 __decorate([
@@ -35,11 +34,11 @@ __decorate([
     __metadata("design:type", Date)
 ], Session.prototype, "appointment", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => doctor_entity_1.Doctor, doctor => doctor.sessions),
-    __metadata("design:type", doctor_entity_1.Doctor)
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, doctor => doctor.sessionsLed),
+    __metadata("design:type", user_entity_1.User)
 ], Session.prototype, "doctor", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => patient_entity_1.Patient, patient => patient.participant),
+    (0, typeorm_1.ManyToMany)(() => user_entity_1.User, patient => patient.participant),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Session.prototype, "participants", void 0);
@@ -47,7 +46,7 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => conversation_entity_1.Conversation, {
         cascade: true,
     }),
-    (0, typeorm_1.JoinTable)(),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", conversation_entity_1.Conversation)
 ], Session.prototype, "conversation", void 0);
 Session = __decorate([
