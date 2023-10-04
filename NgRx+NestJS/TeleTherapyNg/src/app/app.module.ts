@@ -21,12 +21,15 @@ import { httpInterceptorProviders } from './interceptors';
 import { HomeComponent } from './home/component/home.component';
 import { authGuard } from './guards/auth.guard';
 import { SessionComponent } from './session/component/session.component';
-import { AppState } from './store/state';
+import { AppState, initialAppState } from './store/state';
 import { sessionReducer } from './store/session/session.reducer';
 import { SessionModule } from './session/session.module';
 import { SessionPreviewModule } from './session-preview/session-preview.module';
 import { SessionListComponent, SessionListModule } from './session-list/session-list.module';
 import { HomeModule } from './home/home.module';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { DoctorAuthComponent } from './doctor-auth/component/doctor-auth/doctor-auth.component';
+import { DoctorAuthModule } from './doctor-auth/doctor-auth.module';
 //import { doctorReducer } from './store/doctor/doctor.reducer';
 
 export function persistanceReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -37,6 +40,7 @@ export function persistanceReducer(reducer: ActionReducer<AppState>): ActionRedu
       console.log("Ucitacu perzistenciju");
       return persistance ? JSON.parse(persistance) : reducer(state, action);
     }
+
     
     const newState = reducer(state, action);
     localStorage.setItem(localStorageKey, JSON.stringify(newState));
@@ -61,6 +65,7 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
     SessionPreviewModule,
     SessionListModule,
     HomeModule,
+    DoctorAuthModule,
     HttpClientModule,
     StoreModule.forRoot({user: userReducer, session: sessionReducer}, {metaReducers}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
@@ -69,6 +74,7 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
     RouterModule.forRoot([
       {path: '', component: LandingPageComponent},
       {path: 'login', component: LoginComponent},
+      {path: 'doctor-login', component: DoctorAuthComponent},
       {path: 'register', component: RegisterComponent},
       {path: 'home', component: HomeComponent, canActivate: [authGuard]},
       {path: 'session/:id', component: SessionComponent, canActivate: [authGuard]},

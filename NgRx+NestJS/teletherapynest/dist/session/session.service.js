@@ -58,10 +58,19 @@ let SessionService = class SessionService {
             throw new Error('Only patients can sign up for sessions');
     }
     async getSessionsForUser(userId, role) {
-        const user = await this.userRepo.findOne({ where: { id: userId }, relations: { participant: true } });
-        if (!user)
-            throw new Error('User not found');
-        return user.participant;
+        if (role === roles_1.Role.Patient) {
+            const user = await this.userRepo.findOne({ where: { id: userId }, relations: { participant: true } });
+            if (!user)
+                throw new Error('User not found');
+            return user.participant;
+        }
+        else if (role === roles_1.Role.Doctor) {
+            const sessions = await this.sesRepo.createQueryBuilder("session")
+                .leftJoinAndSelect("session.doctor", "doctor")
+                .leftJoinAndSelect("session.participants", "participants")
+                .where("doctor.id = :id", { id: userId }).getMany();
+            return sessions;
+        }
     }
     async getSession(id) {
         console.log("In getSession");
@@ -71,6 +80,30 @@ let SessionService = class SessionService {
             return session;
         else
             return new common_1.HttpException(`No session found with id ${id}`, 501);
+    }
+    async cancelSession(sessionIds, userId) {
+        console.log(sessionIds);
+        const sessions = await this.sesRepo.find({ where: { id: (0, typeorm_3.In)(sessionIds) }, relations: { participants: true } });
+        const user = await this.userRepo.findOne({ where: { id: userId } });
+        if (!user)
+            throw new Error('User not found');
+        if (user.role === roles_1.Role.Patient) {
+            for (let i = 0; i < sessions.length; i++) {
+                const session = sessions[i];
+                session.participants = session.participants.filter(p => p.id !== user.id);
+                if (session.participants.length === 0) {
+                    await this.sesRepo.remove(session);
+                    return null;
+                }
+                await this.sesRepo.save(session);
+            }
+        }
+        else {
+            for (let i = 0; i < sessions.length; i++) {
+                const session = sessions[i];
+                await this.sesRepo.remove(session);
+            }
+        }
     }
 };
 SessionService = __decorate([

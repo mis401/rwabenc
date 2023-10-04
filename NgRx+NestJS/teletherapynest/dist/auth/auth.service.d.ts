@@ -11,9 +11,9 @@ export declare class AuthService {
     private jwtService;
     private httpService;
     constructor(userService: UserService, jwtService: JwtService, httpService: HttpService);
-    register(newUser: CreateUserDTO): Promise<HttpException | {
+    register(newUser: CreateUserDTO): Promise<{
         access_token: string;
-    }>;
+    } | HttpException>;
     validateUser(username: string, password: string): Promise<{
         id: number;
         username: string;
@@ -37,8 +37,8 @@ export declare class AuthService {
     loginDoc(licenceId: string): Promise<HttpException | {
         access_token: string;
     }>;
-    registerDoc(newDoctor: DoctorDTO): Promise<HttpException | {
+    registerDoc(newDoctor: DoctorDTO): Promise<{
         access_token: string;
-    }>;
+    } | HttpException>;
 }
 export {};

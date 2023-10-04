@@ -4,10 +4,12 @@ export interface SessionState {
     sessions: SessionBasic[],
     selectedSession: Session | null,
     conversation: Conversation | null;
+    error: any
 }
 
 export const initialSessionState: SessionState = {
     sessions: [],
     selectedSession: null,
-    conversation: null
+    conversation: null,
+    error: null,
 }

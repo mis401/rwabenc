@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, switchMap, take, tap } from 'rxjs';
 import { Session, SessionBasic } from 'src/app/models';
-import { loadUserSessions, sessionSelected } from 'src/app/store/session/session.actions';
+import { loadUserSessions, navigateToSession, sessionSelected } from 'src/app/store/session/session.actions';
 import { selectSessions } from 'src/app/store/session/session.selectors';
 import { SessionState } from 'src/app/store/session/session.state';
 import { selectId, selectUser } from 'src/app/store/user/user.selector';
@@ -16,7 +16,11 @@ export class SessionListComponent {
   constructor(private store: Store<SessionState>) {}
   userId : number | null = null;
   @Input()
+  modal: boolean = false;
+  @Input()
   sessions: SessionBasic[] = [];
+
+
   sessionsSelector$ = this.store.select(selectId).pipe(
     filter((id) => id !== null),
     tap((id) => this.userId = id),
@@ -26,5 +30,8 @@ export class SessionListComponent {
 
   selected(session: SessionBasic){
     this.store.dispatch(sessionSelected({sessionId: session.id}));
+    if(!this.modal){
+      this.store.dispatch(navigateToSession({session: session.id}));
+    }
   }
 }

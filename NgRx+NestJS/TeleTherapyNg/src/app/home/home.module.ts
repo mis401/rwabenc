@@ -13,6 +13,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { ZakazivanjeDialogComponent } from './zakazivanje-dialog/zakazivanje-dialog.component';
 import { OtkazivanjeDialogComponent } from './otkazivanje-dialog/otkazivanje-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SessionPreviewModule } from '../session-preview/session-preview.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatToolbarModule,
     MatMenuModule,
     MatDialogModule,
+    SessionPreviewModule,
+    SessionListModule,
   ]
 })
 export class HomeModule { }

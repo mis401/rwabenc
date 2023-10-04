@@ -30,4 +30,10 @@ export class SessionController {
     async signUpForSession(@Body() ids){
         return await this.sessionService.signUpForSession(ids.sessionId, ids.userId);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('cancel')
+    async cancelSession(@Body('sessions') sessions: number[], @Body('userId') userId: number){
+        return await this.sessionService.cancelSession(sessions, userId);
+    }
 }

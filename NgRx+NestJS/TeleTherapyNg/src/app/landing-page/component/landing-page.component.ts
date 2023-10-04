@@ -20,8 +20,7 @@ export class LandingPageComponent implements OnInit{
   licenceId : string = "";
 
   onDoctorLogin(){
-    console.log("dispatching");
-    this.store.dispatch(loginDoctor({licenceId: this.licenceId}));
+    this.router.navigate(["doctor-login"]);
   }
 
   ngOnInit(): void {

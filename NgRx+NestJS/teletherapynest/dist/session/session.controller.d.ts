@@ -14,4 +14,5 @@ export declare class SessionController {
         conversation: import("../typeorm").Conversation;
     } & import("../typeorm").Session)>;
     signUpForSession(ids: any): Promise<import("../typeorm").Session>;
+    cancelSession(sessions: number[], userId: number): Promise<any>;
 }

@@ -50,6 +50,15 @@
     display: flex;
     justify-content: flex-end;
   }
+  .chat-msg-doctor{
+    background-color: #ff4343;
+    width: fit-content;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
   
   .sender .chat-msg {
     background-color: #d2effc;

@@ -1,9 +1,9 @@
+import { OnGatewayInit } from '@nestjs/websockets';
 import { Conversation, Message, Session, User } from 'src/typeorm';
 import { Repository } from 'typeorm';
 import { Server } from 'socket.io';
 import { MessageDTO } from './message.dto';
-import { UserConversation } from './userconversation.dto';
-export declare class ChatGateway {
+export declare class ChatGateway implements OnGatewayInit {
     private sessRepo;
     private userRepo;
     private convoRepo;
@@ -11,6 +11,6 @@ export declare class ChatGateway {
     constructor(sessRepo: Repository<Session>, userRepo: Repository<User>, convoRepo: Repository<Conversation>, msgRepo: Repository<Message>);
     server: Server;
     users: number[];
-    handleConnect(data: UserConversation): Promise<void>;
+    afterInit(server: any): void;
     handleMessage(msg: MessageDTO): Promise<void>;
 }

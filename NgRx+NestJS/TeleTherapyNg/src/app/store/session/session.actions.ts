@@ -12,3 +12,8 @@ export const sessionSelectedFailure = createAction("[Session] Session Selected F
 export const loadMessages = createAction("[Session] Load Messages", props<{convoId: number}>());
 export const loadMessagesSuccess = createAction("[Session] Load Messages Success", props<{conv: Conversation}>());
 export const loadMessagesFailure = createAction("[Session] Load Messages Failure", props<{error: any}>());
+
+export const navigateToSession = createAction("[Session] Navigate to Session", props<{session: number}>());
+
+export const cancelSession = createAction("[Session] Cancel Session", props<{sessions: number[], userId: number}>());
+export const cancelSessionFailure = createAction("[Session] Cancel Session Failure", props<{error: any}>());

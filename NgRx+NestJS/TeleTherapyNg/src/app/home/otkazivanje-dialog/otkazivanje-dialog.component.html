@@ -2,9 +2,13 @@
     Otkazivanje sesije
 </h1>
 <mat-dialog-content>
-    <app-session-list [sessions]="sesije"></app-session-list>
+    <div class="flex flex-row flex-wrap">
+        <div *ngIf="sesije.length>0">
+            <app-session-preview *ngFor="let session of sesije" [session]="session" (click)="selected(session)"></app-session-preview>
+        </div>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-raised-button color="basic" mat-dialog-close cdkAutoFocus>Odustani</button>
-    <button mat-button color="warn">Nastavi</button>
+    <button mat-button color="warn" [mat-dialog-close]="selectedSessions">Nastavi</button>
 </mat-dialog-actions>

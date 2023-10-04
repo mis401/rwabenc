@@ -32,6 +32,9 @@ let SessionController = class SessionController {
     async signUpForSession(ids) {
         return await this.sessionService.signUpForSession(ids.sessionId, ids.userId);
     }
+    async cancelSession(sessions, userId) {
+        return await this.sessionService.cancelSession(sessions, userId);
+    }
 };
 __decorate([
     (0, common_1.Get)('getSessions'),
@@ -65,6 +68,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SessionController.prototype, "signUpForSession", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)('cancel'),
+    __param(0, (0, common_1.Body)('sessions')),
+    __param(1, (0, common_1.Body)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Number]),
+    __metadata("design:returntype", Promise)
+], SessionController.prototype, "cancelSession", null);
 SessionController = __decorate([
     (0, common_1.Controller)('session'),
     __metadata("design:paramtypes", [session_service_1.SessionService])

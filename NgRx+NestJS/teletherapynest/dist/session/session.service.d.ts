@@ -18,4 +18,5 @@ export declare class SessionService {
     signUpForSession(sessionId: number, userId: number): Promise<Session>;
     getSessionsForUser(userId: number, role: Role): Promise<Session[]>;
     getSession(id: number): Promise<Session | HttpException>;
+    cancelSession(sessionIds: number[], userId: number): Promise<any>;
 }

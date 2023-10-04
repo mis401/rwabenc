@@ -5,9 +5,14 @@
             <div *ngFor="let m of conversation.messages.slice()">
                 <div *ngIf="m.text != ''" style="margin-bottom: 10px">
                     <div class="chat-msg-wrap receiver" *ngIf="m.userSender!.id != userId else sender">
-                        <div class="chat-msg">
+                        <div *ngIf="m.userSender!.role == 'doctor'; else standard" class="chat-msg-doctor">
                                 <p>{{m.text}}</p>
-                        </div> 
+                        </div>
+                        <ng-template #standard>
+                            <div class="chat-msg">
+                                <p>{{m.text}}</p>
+                            </div> 
+                        </ng-template> 
                     </div>
                     <ng-template #sender>
                         <div class="chat-msg-wrap sender">

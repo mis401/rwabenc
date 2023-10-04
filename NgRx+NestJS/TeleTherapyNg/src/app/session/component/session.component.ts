@@ -2,10 +2,10 @@ import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, View
 import { SessionState } from 'src/app/store/session/session.state';
 import { SessionService } from '../services/session.service';
 import { Store } from '@ngrx/store';
-import { Session, Conversation } from 'src/app/models';
+import { Session, Conversation, User } from 'src/app/models';
 import { selectConversation, selectSelectedSession } from 'src/app/store/session/session.selectors';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { Subscription, exhaustMap, map, mergeMap, switchMap } from 'rxjs';
+import { Subscription, combineLatest, combineLatestWith, exhaustMap, map, mergeMap, switchMap } from 'rxjs';
 import { loadMessages } from 'src/app/store/session/session.actions';
 import { UserState } from 'src/app/store/user/user.state';
 import { selectId } from 'src/app/store/user/user.selector';
@@ -24,34 +24,55 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
   session: Session | null = null;
   sessionSelector$ = this.store.select(selectSelectedSession);
   sessionSelectorSub: Subscription | null = null;
+  selectorSub: Subscription | null = null;
+  messages$: Subscription | null = null;
   userId: number | null = null;
   userIdSub: Subscription | null = null;
   conversation: Conversation | null = null;
+  activeSub$ : Subscription | null = null;
+  inactiveSub$: Subscription | null = null;
+  activeUsers: User[] = [];
+  
 
   messageText: string = "";
 
   @ViewChild('scrollable') private myScrollContainer: ElementRef = new ElementRef('scrollable');
   
   ngOnInit(): void {
-    this.sessionSelectorSub = this.sessionSelector$.pipe(
-      map((session) => {if (!session) return null; else return session;}),
-      map((s) => {this.store.dispatch(loadMessages({convoId: s!.conversation.id})); this.session = s; return s;}),
-      switchMap((s) => this.store.select(selectConversation).pipe(
-      ))
-    ).subscribe((conv) => this.conversation = {id: conv!.id, messages: [...conv?.messages!]});
-    this.userIdSub = this.userStore.select(selectId).subscribe((id) => {this.userId = id; if(id) this.sessionService.connect(id)});
-    this.sessionService.messages$.subscribe(
-    {
-      next: (msg) => {
-        this.conversation?.messages.push(msg);
+    const selectors = combineLatest([this.store.select(selectSelectedSession), this.userStore.select(selectId)]);
+    this.selectorSub = selectors.pipe(
+      map(([s, id]) => {
+        if (s && id){
+          console.log(s);
+          console.log(id);
+          this.store.dispatch(loadMessages({convoId: s.conversation.id}))
+          this.sessionService.connect(id, s.conversation.id);
+          this.userId = id as number;
+          this.session= s as Session;
+        }
+        return [s, id];
+      }),
+      switchMap(([s, id]) => this.store.select(selectConversation))
+    ).subscribe((conv) => {
+      this.conversation = {id: conv!.id, messages: [...conv?.messages!]};
+      console.log(this.userId);
+      console.log(this.session);
+    })
+    this.messages$ = this.sessionService.messages$.subscribe((msg) => {
+      this.conversation?.messages.push(msg);
+    })
+    this.activeSub$ = this.sessionService.connectedUsers$.subscribe((user) => {
+      this.activeUsers.push(user);
+    });
+    this.inactiveSub$ = this.sessionService.disconnectedUsers$.subscribe((user) => {
+      const index = this.activeUsers.indexOf(user);
+      if (index !== -1){
+        this.activeUsers.splice(index, 1);
       }
-    }
-    )
+    });
   }
   ngOnDestroy(): void {
-    this.sessionSelectorSub?.unsubscribe();
-    this.userIdSub?.unsubscribe();
-    this.sessionService.disconnect(this.userId!);
+
   }
 
   ngAfterViewChecked(): void {

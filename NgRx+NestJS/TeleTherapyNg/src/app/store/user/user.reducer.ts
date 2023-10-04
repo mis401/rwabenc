@@ -46,9 +46,9 @@ export const userReducer = createReducer(
     })),
     on(logout, (state, {}) => ({
         ...state,
-        user: null,
         token: null,
+        user: null,
+        userId: null,
         error: null,
-        userId: null
     }))
 );

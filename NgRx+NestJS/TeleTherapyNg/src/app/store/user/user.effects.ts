@@ -39,7 +39,7 @@ export class UserEffects {
     ));
 
     redirectAfterLogin$ = createEffect(() => this.actions$.pipe(
-        ofType(loginUserSuccess, registerUserSuccess),
+        ofType(loginUserSuccess, registerUserSuccess, loginDoctorSuccess),
         exhaustMap(() => this.router.navigate(["home"]))
     ), { dispatch: false });
 

@@ -8,11 +8,11 @@ export interface User {
     username: string,
     firstName: string,
     lastName: string,
-    phoneNumber: string,
+    phoneNumber?: string,
     id?: number,
     zk?: string | null,
     lbo?: string | null,
-    licenceId: string | null;
+    licenceId?: string | null;
     participant?: Session[] | null;
     messages?: Message[] | null;
     reviewsLeft?: Review[] | null;

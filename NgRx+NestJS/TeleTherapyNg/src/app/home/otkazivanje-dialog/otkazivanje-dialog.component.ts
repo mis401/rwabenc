@@ -19,8 +19,25 @@ export class OtkazivanjeDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public userId: number) {}
 
     sesije: SessionBasic[] = [];
+    selectedSessions: SessionBasic[] = [];
   ngOnInit(): void {
 
-    this.store.select(selectSessions).pipe(take(1)).subscribe((sessions) => this.sesije = [...sessions]);
+    this.store.select(selectSessions).pipe().subscribe((sessions) => this.sesije = [...sessions]);
+  }
+
+  odustani(){
+    
+  }
+
+  selected(session: SessionBasic){
+    const index = this.selectedSessions.indexOf(session);
+    if (index !== -1){
+      this.selectedSessions.splice(index, 1);
+      return;
+    }
+    else {
+      this.selectedSessions.push(session);
+    }
+    console.log(this.selectedSessions);
   }
 }

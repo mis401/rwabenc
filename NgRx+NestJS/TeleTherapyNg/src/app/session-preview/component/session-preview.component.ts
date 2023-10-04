@@ -8,6 +8,10 @@ import { Session, SessionBasic } from 'src/app/models';
 })
 export class SessionPreviewComponent {
   
-  
+  clicked: boolean = false;
+  toggle(){
+    console.log("toggle");
+    this.clicked=!this.clicked;
+  }
   @Input() session: SessionBasic | undefined;
 }
