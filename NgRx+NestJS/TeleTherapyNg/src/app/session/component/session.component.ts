@@ -10,6 +10,7 @@ import { loadMessages } from 'src/app/store/session/session.actions';
 import { UserState } from 'src/app/store/user/user.state';
 import { selectId } from 'src/app/store/user/user.selector';
 import { MessageDTO } from 'src/app/models/dto/message.dto';
+import { UserBasicDTO } from 'src/app/models/dto/user.basic.dto';
 
 @Component({
   selector: 'app-session',
@@ -31,7 +32,7 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
   conversation: Conversation | null = null;
   activeSub$ : Subscription | null = null;
   inactiveSub$: Subscription | null = null;
-  activeUsers: User[] = [];
+  activeUsers: UserBasicDTO[] = [];
   
 
   messageText: string = "";
@@ -46,6 +47,7 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
           console.log(s);
           console.log(id);
           this.store.dispatch(loadMessages({convoId: s.conversation.id}))
+          console.log("sad treba connect");
           this.sessionService.connect(id, s.conversation.id);
           this.userId = id as number;
           this.session= s as Session;
@@ -55,24 +57,25 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
       switchMap(([s, id]) => this.store.select(selectConversation))
     ).subscribe((conv) => {
       this.conversation = {id: conv!.id, messages: [...conv?.messages!]};
-      console.log(this.userId);
-      console.log(this.session);
+      // console.log(this.userId);
+      // console.log(this.session);
     })
     this.messages$ = this.sessionService.messages$.subscribe((msg) => {
       this.conversation?.messages.push(msg);
     })
-    this.activeSub$ = this.sessionService.connectedUsers$.subscribe((user) => {
-      this.activeUsers.push(user);
+    this.activeSub$ = this.sessionService.connectedUsers$.subscribe((users) => {
+      
+      this.activeUsers = [...users];
     });
-    this.inactiveSub$ = this.sessionService.disconnectedUsers$.subscribe((user) => {
-      const index = this.activeUsers.indexOf(user);
-      if (index !== -1){
-        this.activeUsers.splice(index, 1);
-      }
+    this.inactiveSub$ = this.sessionService.disconnectedUsers$.subscribe((users) => {
+      console.log(users);
+      this.activeUsers = [...users]
+      console.log(this.activeUsers);
     });
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
   ngOnDestroy(): void {
-
+    this.sessionService.disconnect(this.userId!, this.conversation!.id);
   }
 
   ngAfterViewChecked(): void {

@@ -19,7 +19,7 @@ export class ChatService {
         .leftJoinAndSelect("messages.userSender", "userSender")
         .where("conversation.id = :convid", {convid: id})
         .getOne();
-        console.log(conv);
+        //console.log(conv);
         
         if (conv)
             return conv;

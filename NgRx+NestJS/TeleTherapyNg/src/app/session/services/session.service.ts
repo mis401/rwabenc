@@ -17,9 +17,11 @@ export class SessionService {
       this.messages$.next(msg);
     });
     this.socket.on("konektovan", (user) => {
+      console.log("dobio konektovan");
       this.connectedUsers$.next(user);
     });
     this.socket.on("diskonektovan", (user) => {
+      console.log("dobio diskonektovan");
       this.disconnectedUsers$.next(user);
     });
   }
@@ -28,22 +30,8 @@ export class SessionService {
     text: '',
     date: new Date(),
   })
-  connectedUsers$: BehaviorSubject<User> = new BehaviorSubject<User>({
-    id: 0,
-    username: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    role: Role.Patient,
-  })
-  disconnectedUsers$: BehaviorSubject<User> = new BehaviorSubject<User>({
-    id: 0,
-    username: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    role: Role.Patient,
-  })
+  connectedUsers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([])
+  disconnectedUsers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([])
 
     
   url = 'http://localhost:3000';
@@ -52,8 +40,8 @@ export class SessionService {
   connect(user: number, conversation: number){
     this.socket.emit('connectUser', {user, conversation});
   }
-  disconnect(id: number){
-    this.socket.emit('disconnectUser', id);
+  disconnect(user: number, conversation: number){
+    this.socket.emit('disconnectUser', {user, conversation});
   }
 
   sendMessage(msg: MessageDTO){

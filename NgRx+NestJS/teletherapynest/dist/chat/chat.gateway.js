@@ -24,34 +24,52 @@ let ChatGateway = class ChatGateway {
         this.userRepo = userRepo;
         this.convoRepo = convoRepo;
         this.msgRepo = msgRepo;
-        this.users = [];
+        this.ConversationUser = new Map();
     }
     afterInit(server) {
         this.server.on('connection', (socket) => {
-            console.log('\n\n\n');
-            socket.on('connectUser', (data) => {
+            socket.on('connectUser', async (data) => {
                 socket.join(`${data.conversation}`);
                 console.log("Prijavio se korisnik" + data.user);
                 console.log(socket.rooms);
             });
         });
-        this.server.on('messageFromUser', async (msg) => {
-            const conversation = await this.convoRepo.findOne({ where: { id: msg.conversation } });
-            const user = await this.userRepo.findOne({ where: { id: msg.userSender } });
-            const date = new Date();
-            const newMsg = {
-                id: 0,
-                text: msg.text,
-                userSender: user,
-                date,
-                conversation
-            };
-            const savedMsg = await this.msgRepo.save(newMsg);
-            this.server.emit(`messageFromServer`, savedMsg);
-            console.log(savedMsg);
-        });
+    }
+    async handleConnect(data) {
+        console.log("Prijavio se korisnik " + data.user);
+        let usersInRoom = this.ConversationUser.get(data.conversation);
+        console.log(usersInRoom);
+        if (!usersInRoom) {
+            usersInRoom = [];
+        }
+        if (!usersInRoom.includes(data.user))
+            usersInRoom.push(data.user);
+        console.log(usersInRoom);
+        this.ConversationUser.set(data.conversation, usersInRoom);
+        let users = await this.userRepo.find({ where: { id: (0, typeorm_3.In)(usersInRoom) } });
+        users = users.map(user => { delete user.passwordHash; return user; });
+        this.server.to(`${data.conversation}`).emit('konektovan', users);
+    }
+    async handleDisconnect(data) {
+        console.log("Odjavio se korisnik " + data.user);
+        let usersInRoom = this.ConversationUser.get(data.conversation);
+        console.log(usersInRoom);
+        if (!usersInRoom) {
+            usersInRoom = [];
+        }
+        const index = usersInRoom.indexOf(data.user);
+        console.log(index);
+        if (index !== -1) {
+            usersInRoom.splice(index, 1);
+        }
+        console.log(usersInRoom);
+        this.ConversationUser.set(data.conversation, usersInRoom);
+        let users = await this.userRepo.find({ where: { id: (0, typeorm_3.In)(usersInRoom) } });
+        users = users.map(user => { delete user.passwordHash; return user; });
+        this.server.to(`${data.conversation}`).emit('diskonektovan', users);
     }
     async handleMessage(msg) {
+        console.log("sub");
         const conversation = await this.convoRepo.findOne({ where: { id: msg.conversation } });
         const user = await this.userRepo.findOne({ where: { id: msg.userSender } });
         const date = new Date();
@@ -71,6 +89,20 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], ChatGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('connectUser'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "handleConnect", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('disconnectUser'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "handleDisconnect", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)(`messageFromUser`),
     __param(0, (0, websockets_1.MessageBody)()),
