@@ -2,7 +2,7 @@
 .chat {
     border: 1px solid #ccc;
     
-    background-color: #e9f4f2;
+    background-color: #2a323e;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 .inner-chat{
     position: relative;
     min-height: 200px;
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 10px;
@@ -66,7 +66,7 @@
   }
   
   .chat-card {
-    background-color: #ffffff;
+    background-color: #475569;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -83,7 +83,6 @@
   }
   
   button[type="reset"] {
-    background-color: #2196f3;
     color: #ffffff;
     border-radius: 5px;
     padding: 10px 20px;
@@ -95,3 +94,5 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+  

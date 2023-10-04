@@ -1,45 +1,80 @@
-<div *ngIf="conversation != null && userId != null; else load" class="flex flex-row">
+<div *ngIf="conversation != null && userId != null; else load" class="h-screen flex flex-row bg-slate-800">
     <div class="sm:w-full md:w-4/5 h-full chat">
         <div #scrollable class="inner-chat">
-        <div class="chat-card">
-            <div *ngFor="let m of conversation.messages.slice()">
-                <div *ngIf="m.text != ''" style="margin-bottom: 10px">
-                    <div class="chat-msg-wrap receiver" *ngIf="m.userSender!.id != userId else sender">
-                        <div *ngIf="m.userSender!.role == 'doctor'; else standard" class="chat-msg-doctor">
+            <div class="chat-card">
+                <div *ngFor="let m of conversation.messages.slice()">
+                    <div *ngIf="m.text != ''" style="margin-bottom: 10px">
+                        <div class="chat-msg-wrap receiver" *ngIf="m.userSender!.id != userId else sender">
+                            <div *ngIf="m.userSender!.role == 'doctor'; else standard" class="chat-msg-doctor">
+                                <p class="text-xs text-left">{{m.userSender!.username!}}</p>
                                 <p>{{m.text}}</p>
-                        </div>
-                        <ng-template #standard>
-                            <div class="chat-msg">
-                                <p>{{m.text}}</p>
-                            </div> 
-                        </ng-template> 
-                    </div>
-                    <ng-template #sender>
-                        <div class="chat-msg-wrap sender">
-                            <div class="chat-msg">
-                                    <p>{{m.text}}</p>
                             </div>
+                            <ng-template #standard>
+                                <div class="chat-msg">
+                                    <p class="text-xs text-left">{{m.userSender!.username!}}</p>
+                                    <p>{{m.text}}</p>
+                                </div> 
+                            </ng-template> 
                         </div>
-                    </ng-template>
+                        <ng-template #sender>
+                            <div class="chat-msg-wrap sender">
+                                <div class="chat-msg">
+                                    <p class="text-xs text-right">{{m.userSender!.username!}}</p>
+                                    <p>{{m.text}}</p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
                 </div>
-            </div>
-            <div class="akcije">
-                <div class="input-poruke">
-                    <mat-form-field style="width: 100%">
-                        <input matInput type="text" placeholder="Poruka" (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
-                    </mat-form-field>
-                    <button mat-raised-button color="primary" type="reset" (click)="sendMessage()">
-                        Pošalji
-                    </button>
+                <div class="akcije">
+                    <div class="input-poruke">
+                        <mat-form-field style="width: 100%">
+                            <input matInput type="text" placeholder="Poruka" (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
+                        </mat-form-field>
+                        <button class="bg-green-500" type="reset" (click)="sendMessage()">
+                            Pošalji
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="">
-        {{activeUsers | json}}
+    <div>
+        <div *ngIf="session">
+            <div *ngIf="activeIds.includes(session.doctor.id!); else inactiveDoctor">
+                <div class="bg-neutral-300 max-w-4xl min-w-fit  border-slate-100 m-5 rounded-md">
+                    <div class="w-40">
+                        <p class="p-5">{{session.doctor.firstName}}</p>
+                    </div>
+                </div>
+            </div>
+            <ng-template #inactiveDoctor>
+                <div class="bg-red-950/20 max-w-4xl min-w-fit m-5 mb-2.5 mt-2.5 rounded-md">
+                    <div class="w-40">
+                        <p class="p-5 text-slate-600">{{session.doctor.firstName}}</p>
+                    </div>
+                </div>
+            </ng-template>
+            <div *ngFor="let participant of session!.participants!" class="flex flex-col">
+                <div *ngIf="activeIds.includes(participant.id!); else inactive">
+                    <div class="bg-slate-100 max-w-4xl min-w-fit  border-slate-100 m-5 rounded-md">
+                        <div class="w-40">
+                            <p class="p-5">{{participant.username}}</p>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #inactive>
+                    <div class="bg-red-950/20 max-w-4xl min-w-fit m-5 mb-2.5 mt-2.5 rounded-md">
+                        <div class="w-40">
+                            <p class="p-5 text-slate-600">{{participant.username}}</p>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
     </div>
 </div>
-</div>
+
 <ng-template #load>
     <div class="load">
         <mat-progress-spinner mode="indeterminate" class="spinner"></mat-progress-spinner>

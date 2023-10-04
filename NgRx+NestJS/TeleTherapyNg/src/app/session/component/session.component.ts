@@ -32,7 +32,8 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
   conversation: Conversation | null = null;
   activeSub$ : Subscription | null = null;
   inactiveSub$: Subscription | null = null;
-  activeUsers: UserBasicDTO[] = [];
+  activeUsers: User[] = [];
+  activeIds: number[] = [];
   
 
   messageText: string = "";
@@ -51,6 +52,7 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
           this.sessionService.connect(id, s.conversation.id);
           this.userId = id as number;
           this.session= s as Session;
+          
         }
         return [s, id];
       }),
@@ -66,10 +68,13 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
     this.activeSub$ = this.sessionService.connectedUsers$.subscribe((users) => {
       
       this.activeUsers = [...users];
+      this.activeIds = this.activeUsers.map((user) => user.id!);
+      console.log(this.activeUsers);
     });
     this.inactiveSub$ = this.sessionService.disconnectedUsers$.subscribe((users) => {
       console.log(users);
       this.activeUsers = [...users]
+      this.activeIds = this.activeUsers.map((user) => user.id!);
       console.log(this.activeUsers);
     });
     window.onbeforeunload = () => this.ngOnDestroy();
