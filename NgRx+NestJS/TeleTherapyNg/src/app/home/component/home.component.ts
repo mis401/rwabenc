@@ -7,9 +7,10 @@ import { selectId, selectRole } from 'src/app/store/user/user.selector';
 import { OtkazivanjeDialogComponent } from '../otkazivanje-dialog/otkazivanje-dialog.component';
 import { logout } from 'src/app/store/user/user.actions';
 import { SessionBasic, SessionIdDTO } from 'src/app/models';
-import { cancelSession, createSession } from 'src/app/store/session/session.actions';
+import { cancelSession, createSession, joinSession } from 'src/app/store/session/session.actions';
 import { Role } from 'src/Roles';
 import { ZakazivanjeDialogComponent } from '../zakazivanje-dialog/zakazivanje-dialog.component';
+import { PrikljucivanjeDialogComponent } from '../prikljucivanje-dialog/prikljucivanje-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,13 @@ export class HomeComponent implements OnInit {
     }
   
 
-  prijavi(){}
+  prijavi(){
+    const dialog = this.dialogRef.open(PrikljucivanjeDialogComponent, {data: this.userId, minWidth: '1024px', minHeight: '500px'});
+    dialog.afterClosed().subscribe((result: SessionBasic) => {
+      console.log(result);
+      this.store.dispatch(joinSession({session: result.id, user: this.userId!}));
+      });
+  }
 
   logOut(){
     this.store.dispatch(logout());

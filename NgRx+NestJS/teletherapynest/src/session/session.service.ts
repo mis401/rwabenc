@@ -107,4 +107,18 @@ export class SessionService {
         const updatedSession = await this.sesRepo.update({id: id}, {sessionState: SessionState.Ended});
         console.log(updatedSession);
     }   
+
+    async searchSessionsByName(name: string){
+        try{
+        const sessions = await this.sesRepo.createQueryBuilder("session")
+        .leftJoinAndSelect("session.doctor", "doctor")
+        .leftJoinAndSelect("session.participants", "participants")
+        .leftJoinAndSelect("session.conversation", "conversation")
+        .where("session.name LIKE :name", {name: `%${name}%`}).getMany();
+        return sessions;
+        }
+        catch (e){
+            return new HttpException("Error searching sessions", 501);
+        }
+    }
 }

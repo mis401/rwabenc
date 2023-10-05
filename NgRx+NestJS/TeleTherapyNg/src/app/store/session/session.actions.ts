@@ -21,3 +21,7 @@ export const cancelSessionFailure = createAction("[Session] Cancel Session Failu
 export const createSession = createAction("[Session] Create Session", props<{session: SessionIdDTO}>());
 export const createSessionSuccess = createAction("[Session] Create Session Success", props<{session: Session}>());
 export const createSessionFailure = createAction("[Session] Create Session Failure", props<{error: any}>());
+
+export const joinSession = createAction("[Session] Join Session", props<{session: number, user: number}>());
+export const joinSessionSuccess = createAction("[Session] Join Session Success", props<{session: Session}>());
+export const joinSessionFailure = createAction("[Session] Join Session Failure", props<{error: any}>());

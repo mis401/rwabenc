@@ -29,6 +29,6 @@ export class PrikljucivanjeDialogComponent {
       });
     }
     selected(session: SessionBasic){
-
+      this.selectedSession = session;
     }
 }

@@ -70,6 +70,10 @@ export class SessionService {
   searchSessions(name: string){
     return this.http.get<Session[]>(`${this.url}/session/search/${name}`);
   }
+
+  joinSession(session: number, user: number){
+    return this.http.post<Session>(`${this.url}/session/signup`, {sessionId: session, userId: user});
+  }
   
   endSession(session: number, conversation: number){
     this.socket.emit('command', {command: Commands.StopSession, conversation, session});

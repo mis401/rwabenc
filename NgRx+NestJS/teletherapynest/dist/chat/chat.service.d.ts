@@ -7,6 +7,6 @@ export declare class ChatService {
     private msgRepo;
     private sessionService;
     constructor(convoRepo: Repository<Conversation>, msgRepo: Repository<Message>, sessionService: SessionService);
-    getMessagesForConversation(id: any): Promise<Conversation | HttpException>;
+    getMessagesForConversation(id: any): Promise<HttpException | Conversation>;
     endSession(id: number): Promise<void>;
 }

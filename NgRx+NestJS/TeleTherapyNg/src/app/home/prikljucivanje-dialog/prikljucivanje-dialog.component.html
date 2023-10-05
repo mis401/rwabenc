@@ -15,14 +15,18 @@
             </mat-form-field>
        </form>
     </div>
-    <div *ngIf="search">
-        <div *ngIf="sessions.length == 0">
+    <div *ngIf="searched">
+        <div *ngIf="sessions.length == 0; else found">
             <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
         </div>
-        <app-session-preview *ngFor="let session of sessions" [session]="session" (click)="selected(session)"></app-session-preview>
+        <ng-template #found>
+            <div>
+                <app-session-preview *ngFor="let session of sessions" [session]="session" (click)="selected(session)"></app-session-preview>
+            </div>
+        </ng-template>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-raised-button color="basic" mat-dialog-close>Odustani</button>
-    <button mat-button color="warn" [mat-dialog-close]="selectedSessions">Nastavi</button>
+    <button mat-button color="primary" [mat-dialog-close]="selectedSession">Nastavi</button>
 </mat-dialog-actions>

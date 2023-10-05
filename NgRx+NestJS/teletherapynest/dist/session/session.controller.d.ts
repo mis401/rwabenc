@@ -15,4 +15,5 @@ export declare class SessionController {
     } & import("../typeorm").Session)>;
     signUpForSession(ids: any): Promise<import("../typeorm").Session>;
     cancelSession(sessions: number[], userId: number): Promise<any>;
+    searchSessionsByName(name: string): Promise<import("../typeorm").Session[] | import("@nestjs/common").HttpException>;
 }

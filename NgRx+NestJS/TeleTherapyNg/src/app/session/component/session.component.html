@@ -1,5 +1,5 @@
-<div *ngIf="conversation != null && userId != null; else load" class="h-screen flex flex-row bg-slate-800">
-    <div class="sm:w-full md:w-4/5 h-full chat">
+<div *ngIf="conversation != null && userId != null; else load" class="min-h-screen flex flex-row bg-slate-800">
+    <div class="sm:w-full min-h-screen chat">
         <div #scrollable class="inner-chat">
             <div class="chat-card">
                 <div *ngFor="let m of conversation.messages.slice()">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="akcije">
-                    <div class="input-poruke">
+                    <div class="input-poruke flex flex-row ">
                         <mat-form-field style="width: 100%">
                             <input matInput type="text" placeholder="Poruka" [disabled]='meetingTime || sessionEnded' (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
                         </mat-form-field>
@@ -40,15 +40,15 @@
         </div>
     </div>
 
-    <div>
-        <div *ngIf="session">
+    <div class="hidden md:block">
+        <div *ngIf="session flex flex-col flex-wrap">
             <div *ngIf="userId == session!.doctor!.id!">
                 <button class="bg-red-500 max-w-4xl min-w-fit w-40 h-10 rounded-sm m-5" (click)="endSession()">Završi sesiju</button>
             </div>
             <div *ngIf="activeIds.includes(session.doctor.id!); else inactiveDoctor">
                 <div class="bg-neutral-300 max-w-4xl min-w-fit  border-slate-100 m-5 rounded-md">
                     <div class="w-40">
-                        <p class="p-5">{{session.doctor.firstName}}</p>
+                        <p class="p-5">{{session.doctor.firstName}} {{session.doctor.lastName}}</p>
                     </div>
                 </div>
             </div>

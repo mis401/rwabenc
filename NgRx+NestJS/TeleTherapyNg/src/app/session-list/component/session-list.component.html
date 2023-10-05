@@ -1,7 +1,12 @@
 <div *ngIf="(sessionsSelector$ | async) as sessions">
-    <div class="flex flex-row flex-wrap">
-        <div *ngIf="sessions.length>0">
-            <app-session-preview *ngFor="let session of sessions" [session]="session" (click)="selected(session)"></app-session-preview>
+    <div >
+        <div *ngIf="sessions.length>0; else noSessions" class="flex flex-row flex-wrap justify-start">
+            <app-session-preview class="p-5" *ngFor="let session of sessions" [session]="session" (click)="selected(session)"></app-session-preview>
         </div>
+        <ng-template #noSessions>
+            <div class="flex flex-row flex-wrap justify-center">
+                <h1 class="text-3xl text-gray-100">Niste prijavljeni ni na jednu sesiju</h1>
+            </div>
+        </ng-template>
     </div>
 </div>

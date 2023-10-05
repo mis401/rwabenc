@@ -1,23 +1,33 @@
-<div class="bg-slate-500/50 max-w-full h-screen flex flex-row">
-    <div class="w-4/5 bg-slate-600" flex flex-col>
-        <div class="h-60">
-            <div class="bg-slate-400 shadow-lg flex flex-row justify-items-start">
-                <mat-toolbar>
-                    <button mat-button [matMenuTriggerFor]="menu">Sesije</button>
-                    <mat-menu #menu="matMenu">
-                        <button *ngIf="role=='doctor'" mat-menu-item (click)="zakazi()">Zakazite sesiju</button>
-                        <button *ngIf="role=='patient'" mat-menu-item (click)="prijavi()">Pridruzite se sesiji</button>
-                        <button mat-menu-item (click)="otkazi()">Otkazite sesiju</button>
-                    </mat-menu>
-                    <button mat-flat-button color="link" (click)="logOut()">Odjava</button>
-                </mat-toolbar>
+<div class="min-h-screen">
+    <div class="bg-slate-500/50 max-w-full h-full flex flex-row">
+        <div class="w-4/5 bg-slate-600" flex flex-col>
+            <div class="h-60">
+                <div class="bg-slate-400 shadow-lg flex flex-row justify-items-start">
+                    <mat-toolbar>
+                        <button mat-button [matMenuTriggerFor]="menu">Sesije</button>
+                        <mat-menu #menu="matMenu">
+                            <button *ngIf="role=='doctor'" mat-menu-item (click)="zakazi()">Zakazite sesiju</button>
+                            <button *ngIf="role=='patient'" mat-menu-item (click)="prijavi()">Pridruzite se sesiji</button>
+                            <button mat-menu-item (click)="otkazi()">Otkazite sesiju</button>
+                        </mat-menu>
+                        <button mat-flat-button color="link" (click)="logOut()">Odjavite se</button>
+                    </mat-toolbar>
+                </div>
             </div>
+            <div class="pl-20 pr-20">
+                <app-session-list></app-session-list>            
+            </div>
+            <p>tekst</p>
+            <p>tekst</p>
+            <p>tekst</p>
+            <p>tekst</p>
+            <p>tekst</p>
+            <p>tekst</p>
+            <p>tekst</p>
+
         </div>
-        <div class="pl-20">
-            <app-session-list></app-session-list>            
+        <div class="w-1/5 bg-slate-200/75">
+            <mat-calendar [(selected)]="selectedDate"></mat-calendar>
         </div>
-    </div>
-    <div class="w-1/5 bg-slate-200/75">
-        <mat-calendar [(selected)]="selectedDate"></mat-calendar>
     </div>
 </div>

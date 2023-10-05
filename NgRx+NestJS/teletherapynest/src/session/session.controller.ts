@@ -37,5 +37,10 @@ export class SessionController {
         return await this.sessionService.cancelSession(sessions, userId);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('search/:name')
+    async searchSessionsByName(@Param('name') name: string){
+        return await this.sessionService.searchSessionsByName(name);
+    }
 
 }

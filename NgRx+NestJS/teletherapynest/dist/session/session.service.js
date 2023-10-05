@@ -112,6 +112,19 @@ let SessionService = class SessionService {
         const updatedSession = await this.sesRepo.update({ id: id }, { sessionState: "ended" });
         console.log(updatedSession);
     }
+    async searchSessionsByName(name) {
+        try {
+            const sessions = await this.sesRepo.createQueryBuilder("session")
+                .leftJoinAndSelect("session.doctor", "doctor")
+                .leftJoinAndSelect("session.participants", "participants")
+                .leftJoinAndSelect("session.conversation", "conversation")
+                .where("session.name LIKE :name", { name: `%${name}%` }).getMany();
+            return sessions;
+        }
+        catch (e) {
+            return new common_1.HttpException("Error searching sessions", 501);
+        }
+    }
 };
 SessionService = __decorate([
     (0, common_1.Injectable)(),

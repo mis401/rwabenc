@@ -1,17 +1,17 @@
 <div class="container md:w-auto max-w-full h-screen bg-slate-700/90">
     <div class="container mx-auto h-20">
     </div>
-    <div class="container flex flex-col justify-evenly lg:flex-row  mx-auto max-w-7xl h-3/4 top-10 bg-slate-800 rounded-lg" >
+    <div class="container flex flex-col justify-evenly lg:flex-row  mx-auto max-w-7xl lg:h-3/4 min-h-fit top-10 bg-slate-800 rounded-lg" >
         <div class="max-w-md pl-20 pr-10" >
             <p class="text-slate-100 text-4xl">Dobrodosli na portal Teletherapy</p>
             <p class="text-slate-100">Da biste se registrovali, potrebno je da imate zdravstveno osiguranje u sistemu RFZO</p>
-            <img src="assets/blue-clover.png" alt="blue-clover" class="w-auto h-auto">
+            <img src="assets/green-clover3.png" alt="blue-clover" class="w-auto h-auto">
         </div>
         <div class="container flex">
-                <button class="ml-auto mr-2 my-auto bg-neutral-300 w-28 h-8 rounded-md hover:bg-neutral-400" routerLink="/login">Ulogujte se</button>
-                <button class="ml-0 mr-auto my-auto  bg-gray-400 w-28 h-8 rounded-md hover:bg-neutral-400" routerLink="/register">Registrujte se</button>
+                <button class="ml-auto mr-2 my-auto bg-cyan-600 w-28 h-8 rounded-md hover:bg-neutral-400" routerLink="/login">Ulogujte se</button>
+                <button class="ml-0 mr-auto my-auto  bg-green-600 w-28 h-8 rounded-md hover:bg-neutral-400" routerLink="/register">Registrujte se</button>
         </div>
-        <div>
+        <div class="min-w-fit">
             <p class="text-slate-100 text-2xl">Da li ste lekar?</p>
             <!-- <input matInput type="password" placeholder="Unesite broj licence" class="w-max mr-20" [(ngModel)]="licenceId"> -->
             <button mat-raised-button color="accent" (click)="onDoctorLogin()" class="ml-0  my-2">Prijavite se</button>
