@@ -32,6 +32,7 @@ let SessionService = class SessionService {
             throw new common_1.HttpException("No doctor found", 501);
         }
         console.log(doctor);
+        console.log("pravim sesiju");
         const session = await this.sesRepo.save({
             doctor: doctor,
             name: sesDTO.name,
@@ -104,6 +105,12 @@ let SessionService = class SessionService {
                 await this.sesRepo.remove(session);
             }
         }
+    }
+    async endSession(id) {
+        const session = await this.sesRepo.findOne({ where: { id: id } });
+        session.sessionState = "ended";
+        const updatedSession = await this.sesRepo.update({ id: id }, { sessionState: "ended" });
+        console.log(updatedSession);
     }
 };
 SessionService = __decorate([

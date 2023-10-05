@@ -9,6 +9,7 @@ import { Inject } from '@nestjs/common';
 import { UserConversation } from './userconversation.dto';
 import { Socket } from 'dgram';
 import { disconnect } from 'process';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({
     cors: {
@@ -21,6 +22,7 @@ export class ChatGateway implements OnGatewayInit{
         @InjectRepository(User) private userRepo: Repository<User>,
         @InjectRepository(Conversation) private convoRepo: Repository<Conversation>,
         @InjectRepository(Message) private msgRepo: Repository<Message>,
+        private chatService: ChatService
     ) {
         
     }
@@ -98,4 +100,23 @@ export class ChatGateway implements OnGatewayInit{
         this.server.to(`${msg.conversation}`).emit(`messageFromServer`, savedMsg);
         console.log(savedMsg);
     }
+
+    @SubscribeMessage(`command`)
+    async handleCommand(@MessageBody() msg: Command){
+        console.log(msg);
+        this.chatService.endSession(msg.session)
+        if (msg.command === Commands.StopSession){
+            this.server.to(`${msg.conversation}`).emit(`command`, {command: Commands.StopSession});
+        }
+    }
+}
+
+interface Command{
+    command: Commands
+    conversation: number
+    session: number
+}
+const enum Commands {
+    None = "none",
+    StopSession = "stop session"
 }

@@ -17,10 +17,12 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("../typeorm");
 const typeorm_3 = require("typeorm");
+const session_service_1 = require("../session/session.service");
 let ChatService = class ChatService {
-    constructor(convoRepo, msgRepo) {
+    constructor(convoRepo, msgRepo, sessionService) {
         this.convoRepo = convoRepo;
         this.msgRepo = msgRepo;
+        this.sessionService = sessionService;
     }
     async getMessagesForConversation(id) {
         const conv = await this.convoRepo.createQueryBuilder("conversation")
@@ -33,13 +35,17 @@ let ChatService = class ChatService {
         else
             return new common_1.HttpException("Cannot find conversation", 501);
     }
+    async endSession(id) {
+        const session = await this.sessionService.endSession(id);
+    }
 };
 ChatService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(typeorm_2.Conversation)),
     __param(1, (0, typeorm_1.InjectRepository)(typeorm_2.Message)),
     __metadata("design:paramtypes", [typeorm_3.Repository,
-        typeorm_3.Repository])
+        typeorm_3.Repository,
+        session_service_1.SessionService])
 ], ChatService);
 exports.ChatService = ChatService;
 //# sourceMappingURL=chat.service.js.map

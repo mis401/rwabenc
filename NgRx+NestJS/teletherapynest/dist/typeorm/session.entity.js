@@ -49,6 +49,12 @@ __decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", conversation_entity_1.Conversation)
 ], Session.prototype, "conversation", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        nullable: true
+    }),
+    __metadata("design:type", String)
+], Session.prototype, "sessionState", void 0);
 Session = __decorate([
     (0, typeorm_1.Entity)()
 ], Session);

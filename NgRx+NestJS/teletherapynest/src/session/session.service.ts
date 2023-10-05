@@ -4,6 +4,7 @@ import { Role } from 'src/auth/roles';
 import { Conversation, Session, User } from 'src/typeorm';
 import { ArrayContains, In, Repository } from 'typeorm';
 import { SessionDTO } from './session.dto';
+import { SessionState } from 'src/typeorm/session.entity';
 
 @Injectable()
 export class SessionService {
@@ -22,7 +23,7 @@ export class SessionService {
             throw new HttpException("No doctor found", 501);
         }
         console.log(doctor);
-
+        console.log("pravim sesiju");
         const session = await this.sesRepo.save({
             doctor: doctor,
             name: sesDTO.name,
@@ -99,5 +100,11 @@ export class SessionService {
                 await this.sesRepo.remove(session);
             }
         }
+    }
+    async endSession(id: number) {
+        const session = await this.sesRepo.findOne({where: {id: id}});
+        session.sessionState = SessionState.Ended;
+        const updatedSession = await this.sesRepo.update({id: id}, {sessionState: SessionState.Ended});
+        console.log(updatedSession);
     }   
 }

@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Conversation, Session, SessionBasic } from "src/app/models";
+import { Conversation, Session, SessionBasic, SessionIdDTO } from "src/app/models";
 
 export const loadUserSessions = createAction("[Session] Load User Sessions", props<{ userId: number }>());
 export const loadUserSessionsSuccess = createAction("[Session] Load User Sessions Success", props<{ sessions: SessionBasic[] }>());
@@ -17,3 +17,7 @@ export const navigateToSession = createAction("[Session] Navigate to Session", p
 
 export const cancelSession = createAction("[Session] Cancel Session", props<{sessions: number[], userId: number}>());
 export const cancelSessionFailure = createAction("[Session] Cancel Session Failure", props<{error: any}>());
+
+export const createSession = createAction("[Session] Create Session", props<{session: SessionIdDTO}>());
+export const createSessionSuccess = createAction("[Session] Create Session Success", props<{session: Session}>());
+export const createSessionFailure = createAction("[Session] Create Session Failure", props<{error: any}>());

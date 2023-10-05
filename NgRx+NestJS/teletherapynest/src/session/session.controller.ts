@@ -36,4 +36,6 @@ export class SessionController {
     async cancelSession(@Body('sessions') sessions: number[], @Body('userId') userId: number){
         return await this.sessionService.cancelSession(sessions, userId);
     }
+
+
 }

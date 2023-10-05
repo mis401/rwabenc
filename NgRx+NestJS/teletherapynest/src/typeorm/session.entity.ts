@@ -35,4 +35,14 @@ export class Session {
     @JoinColumn()
     conversation: Conversation;
 
+    @Column({
+        nullable: true
+    })
+    sessionState: SessionState;
+
+}
+
+export const enum SessionState {
+    Active = 'active',
+    Ended = 'ended',
 }

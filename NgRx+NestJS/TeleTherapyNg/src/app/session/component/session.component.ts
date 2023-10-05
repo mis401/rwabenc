@@ -1,8 +1,8 @@
 import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SessionState } from 'src/app/store/session/session.state';
-import { SessionService } from '../services/session.service';
+import { Commands, SessionService } from '../services/session.service';
 import { Store } from '@ngrx/store';
-import { Session, Conversation, User } from 'src/app/models';
+import { Session, Conversation, User, SessionStatus } from 'src/app/models';
 import { selectConversation, selectSelectedSession } from 'src/app/store/session/session.selectors';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Subscription, combineLatest, combineLatestWith, exhaustMap, map, mergeMap, switchMap } from 'rxjs';
@@ -32,10 +32,12 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
   conversation: Conversation | null = null;
   activeSub$ : Subscription | null = null;
   inactiveSub$: Subscription | null = null;
+  commands$: Subscription | null = null;
   activeUsers: User[] = [];
   activeIds: number[] = [];
   
-
+  meetingTime: boolean = false;
+  sessionEnded: boolean = false;
   messageText: string = "";
 
   @ViewChild('scrollable') private myScrollContainer: ElementRef = new ElementRef('scrollable');
@@ -52,7 +54,11 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
           this.sessionService.connect(id, s.conversation.id);
           this.userId = id as number;
           this.session= s as Session;
-          
+          if (s.sessionState)
+            this.sessionEnded = s.sessionState == SessionStatus.Ended;
+          else
+            this.sessionEnded = false;
+          this.meetingTime = new Date() < s.appointment;
         }
         return [s, id];
       }),
@@ -77,10 +83,21 @@ export class SessionComponent implements OnInit, OnDestroy, AfterViewChecked{
       this.activeIds = this.activeUsers.map((user) => user.id!);
       console.log(this.activeUsers);
     });
+    this.commands$ = this.sessionService.commands$.subscribe((command) => {
+      console.log(command);
+      if(command.command == Commands.StopSession){
+        this.sessionEnded = true;
+        //this.session!.sessionState = SessionStatus.Ended;
+      }
+    });
     window.onbeforeunload = () => this.ngOnDestroy();
   }
   ngOnDestroy(): void {
     this.sessionService.disconnect(this.userId!, this.conversation!.id);
+  }
+
+  endSession(){
+    this.sessionService.endSession(this.session!.id, this.conversation!.id);
   }
 
   ngAfterViewChecked(): void {

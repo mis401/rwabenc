@@ -11,12 +11,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { DoctorRegisterComponent } from './component/doctor-register/doctor-register.component';
 
 
 
 @NgModule({
   declarations: [
-    DoctorAuthComponent
+    DoctorAuthComponent,
+    DoctorRegisterComponent
   ],
   imports: [
     CommonModule,

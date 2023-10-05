@@ -14,12 +14,17 @@ import { ZakazivanjeDialogComponent } from './zakazivanje-dialog/zakazivanje-dia
 import { OtkazivanjeDialogComponent } from './otkazivanje-dialog/otkazivanje-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SessionPreviewModule } from '../session-preview/session-preview.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { PrikljucivanjeDialogComponent } from './prikljucivanje-dialog/prikljucivanje-dialog.component';
+import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ZakazivanjeDialogComponent,
     OtkazivanjeDialogComponent,
+    PrikljucivanjeDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -33,8 +38,12 @@ import { SessionPreviewModule } from '../session-preview/session-preview.module'
     MatToolbarModule,
     MatMenuModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     SessionPreviewModule,
     SessionListModule,
+    FormsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
   ]
 })
 export class HomeModule { }

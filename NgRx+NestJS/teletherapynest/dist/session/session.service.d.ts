@@ -19,4 +19,5 @@ export declare class SessionService {
     getSessionsForUser(userId: number, role: Role): Promise<Session[]>;
     getSession(id: number): Promise<Session | HttpException>;
     cancelSession(sessionIds: number[], userId: number): Promise<any>;
+    endSession(id: number): Promise<void>;
 }

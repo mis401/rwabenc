@@ -29,6 +29,15 @@ export class SessionListComponent {
   )
 
   selected(session: SessionBasic){
+    console.log(session.appointment);
+    const appointment = new Date(session.appointment);
+    const currentTime = new Date();
+    console.log(currentTime);
+    if (appointment > currentTime){
+      console.log("??")
+      alert("Sesija još nije počela");
+      return;
+    }
     this.store.dispatch(sessionSelected({sessionId: session.id}));
     if(!this.modal){
       this.store.dispatch(navigateToSession({session: session.id}));

@@ -1,5 +1,5 @@
-<div class="max-w-full flex items-center justify-center h-screen bg-cyan-300/50">
-    <div class="flex flex-col justify-evenly bg-sky-400 mx-auto p-20 rounded-lg max-w-7xl p-50">
+<div class="max-w-full flex items-center justify-center h-screen bg-slate-500">
+    <div class="flex flex-col justify-evenly bg-slate-700 mx-auto p-20 rounded-lg max-w-7xl p-50">
         <form #loginForm ngNativeValidate>
             <div class="mx-auto">
                 <mat-form-field appearance="fill">
@@ -53,5 +53,10 @@
                 <button mat-flat-button color="warn" class="cancel-button" routerLink="/">Odustanite</button>
             </div>
         </form>
+        <div>
+            <p class="text-slate-300" style="margin-bottom: 0; margin-top: 0.5rem;">Nemate nalog?</p>
+            <button class="w-28 h-8 text-slate-50 rounded-md shadow-md bg-green-400/60" routerLink="/register/doctor">Registrujte se</button>
+        </div>
     </div>
 </div>
+<router-outlet></router-outlet>

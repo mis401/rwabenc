@@ -1,1 +1,37 @@
-<p>zakazivanje-dialog works!</p>
+<h1 mat-dialog-title>
+    Zakazivanje sesije
+</h1>
+<mat-dialog-content>
+    <div class="flex flex-column flex-wrap">
+        <form #forma>
+            <div>
+                <mat-form-field>
+                    <input matInput type="text" id="name" name="name" placeholder="Naziv" [(ngModel)]="newSession.name" required>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <input matInput id="description" name="description" type="text" placeholder="Opis" [(ngModel)]="newSession.description" required>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <mat-label>Izaberite datum</mat-label>
+                    <input matInput [matDatepicker]="picker" [formControl]="date">
+                    <mat-hint>DD/MM/GGGG</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+            </div>
+            <div>
+                <input type="time" required [(ngModel)]="time" name="time">
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button (click)="log()">cl</button>
+    <button mat-raised-button color="basic" mat-dialog-close cdkAutoFocus>Odustani</button>
+    <button mat-raised-button color="basic" (click)="parse()">Potvrdi</button>
+    <button mat-button color="primary" [disabled]="!potvrda" [mat-dialog-close]="newSession">Zakazi</button>
+</mat-dialog-actions>

@@ -30,6 +30,7 @@ import { HomeModule } from './home/home.module';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DoctorAuthComponent } from './doctor-auth/component/doctor-auth/doctor-auth.component';
 import { DoctorAuthModule } from './doctor-auth/doctor-auth.module';
+import { DoctorRegisterComponent } from './doctor-auth/component/doctor-register/doctor-register.component';
 //import { doctorReducer } from './store/doctor/doctor.reducer';
 
 export function persistanceReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -75,7 +76,10 @@ export const metaReducers: MetaReducer<any>[] = [persistanceReducer];
       {path: '', component: LandingPageComponent},
       {path: 'login', component: LoginComponent},
       {path: 'doctor-login', component: DoctorAuthComponent},
-      {path: 'register', component: RegisterComponent},
+      {path: 'register', children: [
+        {path: '', component: RegisterComponent},
+        {path: 'doctor', component: DoctorRegisterComponent},
+      ]},
       {path: 'home', component: HomeComponent, canActivate: [authGuard]},
       {path: 'session/:id', component: SessionComponent, canActivate: [authGuard]},
       {path: '**', component: LandingPageComponent}

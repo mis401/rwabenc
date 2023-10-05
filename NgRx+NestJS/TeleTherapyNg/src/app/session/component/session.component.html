@@ -29,7 +29,7 @@
                 <div class="akcije">
                     <div class="input-poruke">
                         <mat-form-field style="width: 100%">
-                            <input matInput type="text" placeholder="Poruka" (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
+                            <input matInput type="text" placeholder="Poruka" [disabled]='meetingTime || sessionEnded' (keydown.enter)="sendMessage()" [(ngModel)]="messageText">
                         </mat-form-field>
                         <button class="bg-green-500" type="reset" (click)="sendMessage()">
                             Pošalji
@@ -39,8 +39,12 @@
             </div>
         </div>
     </div>
+
     <div>
         <div *ngIf="session">
+            <div *ngIf="userId == session!.doctor!.id!">
+                <button class="bg-red-500 max-w-4xl min-w-fit w-40 h-10 rounded-sm m-5" (click)="endSession()">Završi sesiju</button>
+            </div>
             <div *ngIf="activeIds.includes(session.doctor.id!); else inactiveDoctor">
                 <div class="bg-neutral-300 max-w-4xl min-w-fit  border-slate-100 m-5 rounded-md">
                     <div class="w-40">

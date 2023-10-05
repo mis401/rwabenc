@@ -8,4 +8,9 @@ export declare class Session {
     doctor: User;
     participants: User[];
     conversation: Conversation;
+    sessionState: SessionState;
+}
+export declare const enum SessionState {
+    Active = "active",
+    Ended = "ended"
 }

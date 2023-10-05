@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { cancelSession, cancelSessionFailure, loadMessages, loadMessagesFailure, loadMessagesSuccess, loadUserSessions, loadUserSessionsFailure, loadUserSessionsSuccess, navigateToSession, sessionSelected, sessionSelectedFailure, sessionSelectedSuccess } from "./session.actions";
+import { cancelSession, cancelSessionFailure, createSession, createSessionSuccess, loadMessages, loadMessagesFailure, loadMessagesSuccess, loadUserSessions, loadUserSessionsFailure, loadUserSessionsSuccess, navigateToSession, sessionSelected, sessionSelectedFailure, sessionSelectedSuccess } from "./session.actions";
 import { catchError, exhaustMap, map, of, switchMap, tap } from "rxjs";
 import { SessionService } from "src/app/session/services/session.service";
 import { SessionListService } from "src/app/session-list/services/session-list.service";
@@ -48,6 +48,16 @@ export class SessionEffects {
         ofType(cancelSession),
         switchMap((action) => this.sessionService.cancelSession(action.sessions, action.userId).pipe(
             map(() => loadUserSessions({userId: action.userId})),
+            catchError((error) => of(cancelSessionFailure({error})))
+        ))
+    ))
+
+
+    createSession$ = createEffect(() => this.actions$.pipe(
+        ofType(createSession),
+        switchMap((action) => this.sessionService.createSession(action.session).pipe(
+            map((session) => createSessionSuccess({session})),
+            map(() => loadUserSessions({userId: action.session.doctor!})),
             catchError((error) => of(cancelSessionFailure({error})))
         ))
     ))

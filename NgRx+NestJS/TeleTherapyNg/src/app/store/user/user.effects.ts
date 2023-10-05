@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { LoginService } from "../../login/service/login.service";
 import { Router } from "@angular/router";
 import { catchError, exhaustMap, map, of, switchMap, tap } from "rxjs";
-import { loginDoctor, loginDoctorFailure, loginDoctorSuccess, loginUser, loginUserFailure, loginUserSuccess, logout, registerUser, registerUserSuccess } from "./user.actions";
+import { loginDoctor, loginDoctorFailure, loginDoctorSuccess, loginUser, loginUserFailure, loginUserSuccess, logout, registerDoctor, registerDoctorFailure, registerUser, registerUserFailure, registerUserSuccess } from "./user.actions";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { RegisterService } from "src/app/register/service/register.service";
 
@@ -34,7 +34,19 @@ export class UserEffects {
                 const user = this.jwtHelper.decodeToken(token.access_token).user; 
                 return registerUserSuccess({ user, token: token.access_token })}
                 ),
-            catchError((error) => of(loginUserFailure({ error })))
+            catchError((error) => of(registerUserFailure({ error })))
+        ))
+    ));
+
+    registerDoctor$ = createEffect(() => this.actions$.pipe(
+        ofType(registerDoctor),
+        switchMap((action) => this.regService.registerDoctor(action.doctor).pipe(
+            tap((token) => {console.log(token)}),
+            map((token) => {
+                const user = this.jwtHelper.decodeToken(token.access_token).user; 
+                return registerUserSuccess({ user, token: token.access_token })}
+                ),
+            catchError((error) => of(registerDoctorFailure({ error })))
         ))
     ));
 

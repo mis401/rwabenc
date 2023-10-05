@@ -18,12 +18,14 @@ const websockets_1 = require("@nestjs/websockets");
 const typeorm_2 = require("../typeorm");
 const typeorm_3 = require("typeorm");
 const socket_io_1 = require("socket.io");
+const chat_service_1 = require("./chat.service");
 let ChatGateway = class ChatGateway {
-    constructor(sessRepo, userRepo, convoRepo, msgRepo) {
+    constructor(sessRepo, userRepo, convoRepo, msgRepo, chatService) {
         this.sessRepo = sessRepo;
         this.userRepo = userRepo;
         this.convoRepo = convoRepo;
         this.msgRepo = msgRepo;
+        this.chatService = chatService;
         this.ConversationUser = new Map();
     }
     afterInit(server) {
@@ -84,6 +86,13 @@ let ChatGateway = class ChatGateway {
         this.server.to(`${msg.conversation}`).emit(`messageFromServer`, savedMsg);
         console.log(savedMsg);
     }
+    async handleCommand(msg) {
+        console.log(msg);
+        this.chatService.endSession(msg.session);
+        if (msg.command === "stop session") {
+            this.server.to(`${msg.conversation}`).emit(`command`, { command: "stop session" });
+        }
+    }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
@@ -110,6 +119,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(`command`),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "handleCommand", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
@@ -123,7 +139,8 @@ ChatGateway = __decorate([
     __metadata("design:paramtypes", [typeorm_3.Repository,
         typeorm_3.Repository,
         typeorm_3.Repository,
-        typeorm_3.Repository])
+        typeorm_3.Repository,
+        chat_service_1.ChatService])
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map

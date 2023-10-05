@@ -5,7 +5,8 @@
                 <mat-toolbar>
                     <button mat-button [matMenuTriggerFor]="menu">Sesije</button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="zakazi()">Zakazite sesiju</button>
+                        <button *ngIf="role=='doctor'" mat-menu-item (click)="zakazi()">Zakazite sesiju</button>
+                        <button *ngIf="role=='patient'" mat-menu-item (click)="prijavi()">Pridruzite se sesiji</button>
                         <button mat-menu-item (click)="otkazi()">Otkazite sesiju</button>
                     </mat-menu>
                     <button mat-flat-button color="link" (click)="logOut()">Odjava</button>
